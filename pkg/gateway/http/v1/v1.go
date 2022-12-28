@@ -5,17 +5,21 @@ import (
 
 	"github.com/go-chi/chi"
 	"go.uber.org/zap"
+
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/usecase"
 )
 
 type Service struct {
-	now    func() time.Time
-	logger *zap.Logger
+	now     func() time.Time
+	logger  *zap.Logger
+	usecase usecase.Usecase
 }
 
-func NewService(logger *zap.Logger) *Service {
+func NewService(usecase usecase.Usecase, logger *zap.Logger) *Service {
 	v := &Service{
-		now:    time.Now,
-		logger: logger,
+		now:     time.Now,
+		logger:  logger,
+		usecase: usecase,
 	}
 	return v
 }

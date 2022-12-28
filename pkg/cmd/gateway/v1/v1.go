@@ -14,6 +14,9 @@ import (
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/gateway/http"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/gateway/http/response"
 	v1 "github.com/CyberAgentHack/server-performance-tuning-2023/pkg/gateway/http/v1"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/repository"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/repository/database"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/usecase"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/util/config"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/util/log"
 )
@@ -58,11 +61,21 @@ func (a *app) run() error {
 	// response
 	response.SetLogger(a.logger)
 
+	// usecase
+	cfg := &usecase.Config{
+		DB: &repository.Database{
+			Episode: database.NewEpisode(),
+			Series:  database.NewSeries(),
+			Season:  database.NewSeason(),
+		},
+	}
+	uc := usecase.NewUsecase(cfg)
+
 	// gateway
 	params := &http.RunServerParams{
 		Group:  &errgroup.Group{},
 		Port:   a.Port,
-		APIs:   []http.API{v1.NewService(a.logger)},
+		APIs:   []http.API{v1.NewService(uc, a.logger)},
 		Logger: a.logger,
 	}
 	server, err := http.RunServer(params)
