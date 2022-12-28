@@ -49,3 +49,33 @@ func (mr *MockUsecaseMockRecorder) ListEpisodes(ctx, req interface{}) *gomock.Ca
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListEpisodes", reflect.TypeOf((*MockUsecase)(nil).ListEpisodes), ctx, req)
 }
+
+// ListSeasons mocks base method.
+func (m *MockUsecase) ListSeasons(ctx context.Context, req *usecase.ListSeasonsRequest) (*usecase.ListSeasonsResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListSeasons", ctx, req)
+	ret0, _ := ret[0].(*usecase.ListSeasonsResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListSeasons indicates an expected call of ListSeasons.
+func (mr *MockUsecaseMockRecorder) ListSeasons(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListSeasons", reflect.TypeOf((*MockUsecase)(nil).ListSeasons), ctx, req)
+}
+
+// ListSeries mocks base method.
+func (m *MockUsecase) ListSeries(ctx context.Context, req *usecase.ListSeriesRequest) (*usecase.ListSeriesResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListSeries", ctx, req)
+	ret0, _ := ret[0].(*usecase.ListSeriesResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListSeries indicates an expected call of ListSeries.
+func (mr *MockUsecaseMockRecorder) ListSeries(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListSeries", reflect.TypeOf((*MockUsecase)(nil).ListSeries), ctx, req)
+}
