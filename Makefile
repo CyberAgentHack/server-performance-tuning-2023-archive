@@ -4,7 +4,7 @@ test:
 
 .PHONY: run-local
 run-local:
-	go run cmd/gateway/main.go v1
+	@go run main.go
 
 .PHONY: generate
 generate:

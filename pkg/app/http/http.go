@@ -1,7 +1,6 @@
 package http
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -9,53 +8,31 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"go.uber.org/zap"
-	"golang.org/x/sync/errgroup"
 )
 
-type API interface {
-	Register(mux *chi.Mux)
+type ServerParams struct {
+	Port    int
+	Logger  *zap.Logger
+	Service *Service
 }
 
-type RunServerParams struct {
-	Group  *errgroup.Group
-	Port   int
-	Logger *zap.Logger
-	APIs   []API
-}
-
-func RunServer(params *RunServerParams) (*http.Server, error) {
+func NewServer(params *ServerParams) *http.Server {
 	const compressLevel = 6
 	router := chi.NewRouter()
 	router.Use(
 		newCORS(),
 		middleware.Compress(compressLevel),
 	)
-	return runServer(router, params.Group, params.Port, params.APIs...), nil
-}
-
-func runServer(router *chi.Mux, group *errgroup.Group, port int, apis ...API) *http.Server {
 	setDefaultHandlers(router)
-	for i := range apis {
-		apis[i].Register(router)
-	}
-	server := &http.Server{
-		Addr:    fmt.Sprintf(":%d", port),
+	params.Service.Register(router)
+	return &http.Server{
+		Addr:    fmt.Sprintf(":%d", params.Port),
 		Handler: router,
 	}
-	serve := func() error {
-		err := server.ListenAndServe()
-		if errors.Is(err, http.ErrServerClosed) {
-			return nil
-		}
-		return err
-	}
-	group.Go(serve)
-	return server
 }
 
 func setDefaultHandlers(mux *chi.Mux) {
 	mux.NotFound(notFoundHandler)
-	mux.Get(HealthCheckPath, healthCheck)
 }
 
 func newCORS() func(http.Handler) http.Handler {
@@ -67,7 +44,6 @@ func newCORS() func(http.Handler) http.Handler {
 			"Accept",
 			"Accept-Encoding",
 			"Content-Type",
-			"X-API-Key",
 			"Authorization",
 			"If-Modified-Since",
 			"X-Requested-With",

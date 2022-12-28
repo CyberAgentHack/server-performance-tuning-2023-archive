@@ -1,4 +1,4 @@
-package v1
+package http
 
 import (
 	"time"
@@ -25,11 +25,12 @@ func NewService(usecase usecase.Usecase, logger *zap.Logger) *Service {
 }
 
 func (s *Service) Register(mux *chi.Mux) {
-	mux.Mount("/v1", s.newRouter())
+	mux.Mount("/", s.newRouter())
 }
 
 func (s *Service) newRouter() chi.Router {
 	r := chi.NewRouter()
+	r.Get("/", livenessCheck)
 	r.Route("/series", s.routeSeries)
 	r.Route("/seasons", s.routeSeason)
 	r.Route("/episodes", s.routeEpisode)

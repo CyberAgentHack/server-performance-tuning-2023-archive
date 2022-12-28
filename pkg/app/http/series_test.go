@@ -1,4 +1,4 @@
-package v1
+package http
 
 import (
 	"context"
@@ -12,8 +12,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/CyberAgentHack/server-performance-tuning-2023/ent"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/errcode"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/usecase"
-	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/util/errcode"
 )
 
 func TestListSeries(t *testing.T) {

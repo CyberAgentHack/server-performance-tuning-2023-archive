@@ -8,7 +8,7 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/util/errcode"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/errcode"
 )
 
 const (

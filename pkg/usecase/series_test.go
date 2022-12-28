@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/CyberAgentHack/server-performance-tuning-2023/ent"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/errcode"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/repository"
-	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/util/errcode"
 )
 
 func TestUsecaseImpl_ListSeries(t *testing.T) {

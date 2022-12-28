@@ -1,12 +1,12 @@
-package v1
+package http
 
 import (
 	"net/http"
 
 	"github.com/go-chi/chi"
 
-	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/gateway/http/request"
-	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/gateway/http/response"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http/request"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http/response"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/usecase"
 )
 
