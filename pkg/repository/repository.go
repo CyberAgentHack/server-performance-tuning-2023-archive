@@ -17,7 +17,7 @@ type Database struct {
 
 type Episode interface {
 	GetCount(ctx context.Context, id string) (int, error)
-	List(ctx context.Context, params *ListEpisodesParams) ([]*ent.Episode, error)
+	List(ctx context.Context, params *ListEpisodesParams) (ent.Episodes, error)
 }
 
 type ListEpisodesParams struct {
@@ -27,7 +27,7 @@ type ListEpisodesParams struct {
 }
 
 type Series interface {
-	List(ctx context.Context, params *ListSeriesParams) ([]*ent.Series, error)
+	List(ctx context.Context, params *ListSeriesParams) (ent.SeriesSlice, error)
 }
 
 type ListSeriesParams struct {
@@ -35,7 +35,7 @@ type ListSeriesParams struct {
 }
 
 type Season interface {
-	List(ctx context.Context, params *ListSeasonsParams) ([]*ent.Season, error)
+	List(ctx context.Context, params *ListSeasonsParams) (ent.Seasons, error)
 }
 
 type ListSeasonsParams struct {

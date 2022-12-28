@@ -14,7 +14,7 @@ func NewSeries() *Series {
 	return &Series{}
 }
 
-func (e *Series) List(ctx context.Context, params *repository.ListSeriesParams) ([]*ent.Series, error) {
+func (e *Series) List(ctx context.Context, params *repository.ListSeriesParams) (ent.SeriesSlice, error) {
 	// TODO
-	return []*ent.Series{{ID: 1}}, nil
+	return ent.SeriesSlice{{ID: 1}}, nil
 }

@@ -52,10 +52,10 @@ func (mr *MockEpisodeMockRecorder) GetCount(ctx, id interface{}) *gomock.Call {
 }
 
 // List mocks base method.
-func (m *MockEpisode) List(ctx context.Context, params *repository.ListEpisodesParams) (*ent.Episode, error) {
+func (m *MockEpisode) List(ctx context.Context, params *repository.ListEpisodesParams) (ent.Episodes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", ctx, params)
-	ret0, _ := ret[0].(*ent.Episode)
+	ret0, _ := ret[0].(ent.Episodes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -90,10 +90,10 @@ func (m *MockSeries) EXPECT() *MockSeriesMockRecorder {
 }
 
 // List mocks base method.
-func (m *MockSeries) List(ctx context.Context, params *repository.ListSeriesParams) (*ent.Series, error) {
+func (m *MockSeries) List(ctx context.Context, params *repository.ListSeriesParams) (ent.SeriesSlice, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", ctx, params)
-	ret0, _ := ret[0].(*ent.Series)
+	ret0, _ := ret[0].(ent.SeriesSlice)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -128,10 +128,10 @@ func (m *MockSeason) EXPECT() *MockSeasonMockRecorder {
 }
 
 // List mocks base method.
-func (m *MockSeason) List(ctx context.Context, params *repository.ListSeasonParams) (*ent.Season, error) {
+func (m *MockSeason) List(ctx context.Context, params *repository.ListSeasonsParams) (ent.Seasons, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", ctx, params)
-	ret0, _ := ret[0].(*ent.Season)
+	ret0, _ := ret[0].(ent.Seasons)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

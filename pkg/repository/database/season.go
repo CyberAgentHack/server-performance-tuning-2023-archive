@@ -14,7 +14,7 @@ func NewSeason() *Season {
 	return &Season{}
 }
 
-func (e *Season) List(ctx context.Context, params *repository.ListSeasonsParams) ([]*ent.Season, error) {
+func (e *Season) List(ctx context.Context, params *repository.ListSeasonsParams) (ent.Seasons, error) {
 	// TODO
-	return []*ent.Season{{ID: 1}}, nil
+	return ent.Seasons{{ID: 1}}, nil
 }
