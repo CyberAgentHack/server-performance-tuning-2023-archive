@@ -13,6 +13,8 @@ var _ Usecase = (*UsecaseImpl)(nil)
 
 type Usecase interface {
 	ListEpisodes(ctx context.Context, req *ListEpisodesRequest) (*ListEpisodesResponse, error)
+	ListSeries(ctx context.Context, req *ListSeriesRequest) (*ListSeriesResponse, error)
+	ListSeasons(ctx context.Context, req *ListSeasonsRequest) (*ListSeasonsResponse, error)
 }
 
 type UsecaseImpl struct {
