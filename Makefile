@@ -5,3 +5,7 @@ test:
 .PHONY: run-local
 run-local:
 	go run cmd/gateway/main.go v1
+
+.PHONY: generate
+generate:
+	go generate ${CURDIR}/...
