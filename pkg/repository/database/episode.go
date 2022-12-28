@@ -19,7 +19,7 @@ func (e *Episode) GetCount(ctx context.Context, id string) (int, error) {
 	return 10, nil
 }
 
-func (e *Episode) List(ctx context.Context, params *repository.ListEpisodesParams) ([]*ent.Episode, error) {
+func (e *Episode) List(ctx context.Context, params *repository.ListEpisodesParams) (ent.Episodes, error) {
 	// TODO
-	return []*ent.Episode{{ID: 1}}, nil
+	return ent.Episodes{{ID: 1}}, nil
 }
