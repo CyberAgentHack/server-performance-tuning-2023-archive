@@ -1,4 +1,4 @@
-package v1
+package http
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"go.uber.org/zap"
 
-	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/gateway/http/response"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http/response"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/usecase/mock"
 )
 
