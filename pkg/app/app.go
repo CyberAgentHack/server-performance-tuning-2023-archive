@@ -9,6 +9,7 @@ import (
 
 	"github.com/kelseyhightower/envconfig"
 	"go.uber.org/zap"
+	"golang.org/x/sync/errgroup"
 
 	apphttp "github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/log"
@@ -43,6 +44,8 @@ func (a *App) runWithContext(ctx context.Context) (err error) {
 	)
 	defer cancel()
 
+	group, gCtx := errgroup.WithContext(ctx)
+
 	a.logger, err = log.NewLogger(a.Level)
 	if err != nil {
 		return err
@@ -68,29 +71,25 @@ func (a *App) runWithContext(ctx context.Context) (err error) {
 	}
 	server := apphttp.NewServer(params)
 
-	errchan := make(chan error, 1)
-	defer close(errchan)
-	go func() {
-		errchan <- server.ListenAndServe()
-	}()
+	group.Go(func() error {
+		return server.ListenAndServe()
+	})
 
 	a.logger.Info("Starting server...", zap.Any("config", a))
 
 	// wait signal or error
-	select {
-	case <-ctx.Done():
-		a.logger.Info("Received signal")
-	case e := <-errchan:
-		if e != nil && !errors.Is(err, http.ErrServerClosed) {
-			a.logger.Info("Received error", zap.Error(e))
-			return err
-		}
-	}
+	<-gCtx.Done()
 	err = server.Shutdown(context.Background())
 	if !errors.Is(err, http.ErrServerClosed) {
 		return err
 	}
-	cancel()
+
 	a.logger.Info("Shutdown...")
+	err = group.Wait()
+	if err != nil && !errors.Is(err, http.ErrServerClosed) {
+		a.logger.Info("Received error", zap.Error(err))
+		return err
+	}
+
 	return nil
 }
