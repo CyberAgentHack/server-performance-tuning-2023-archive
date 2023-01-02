@@ -3,7 +3,7 @@ package database
 import (
 	"context"
 
-	"github.com/CyberAgentHack/server-performance-tuning-2023/ent"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/repository"
 )
 
@@ -19,7 +19,7 @@ func (e *Episode) GetCount(ctx context.Context, id string) (int, error) {
 	return 10, nil
 }
 
-func (e *Episode) List(ctx context.Context, params *repository.ListEpisodesParams) (ent.Episodes, error) {
+func (e *Episode) List(ctx context.Context, params *repository.ListEpisodesParams) (entity.Episodes, error) {
 	// TODO
-	return ent.Episodes{{ID: 1}}, nil
+	return entity.Episodes{{ID: "episodeID"}}, nil
 }

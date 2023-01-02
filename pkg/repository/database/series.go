@@ -3,7 +3,7 @@ package database
 import (
 	"context"
 
-	"github.com/CyberAgentHack/server-performance-tuning-2023/ent"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/repository"
 )
 
@@ -14,7 +14,7 @@ func NewSeries() *Series {
 	return &Series{}
 }
 
-func (e *Series) List(ctx context.Context, params *repository.ListSeriesParams) (ent.SeriesSlice, error) {
+func (e *Series) List(ctx context.Context, params *repository.ListSeriesParams) (entity.SeriesMulti, error) {
 	// TODO
-	return ent.SeriesSlice{{ID: 1}}, nil
+	return entity.SeriesMulti{{ID: "seriesID"}}, nil
 }

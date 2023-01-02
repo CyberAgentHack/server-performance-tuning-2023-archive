@@ -7,7 +7,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/CyberAgentHack/server-performance-tuning-2023/ent"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/errcode"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/repository"
 )
@@ -40,13 +40,13 @@ func TestUsecaseImpl_ListEpisodes(t *testing.T) {
 			setup: func(m *mocks) {
 				m.episode.EXPECT().List(gomock.Any(), &repository.ListEpisodesParams{
 					PageSize: 10,
-				}).Return(ent.Episodes{{ID: 1}}, nil)
+				}).Return(entity.Episodes{{ID: "id"}}, nil)
 			},
 			req: &ListEpisodesRequest{
 				PageSize: 10,
 			},
 			expected: &ListEpisodesResponse{
-				Episodes: ent.Episodes{{ID: 1}},
+				Episodes: entity.Episodes{{ID: "id"}},
 			},
 		},
 	}

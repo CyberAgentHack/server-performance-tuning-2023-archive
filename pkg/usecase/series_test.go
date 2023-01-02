@@ -7,7 +7,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/CyberAgentHack/server-performance-tuning-2023/ent"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/errcode"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/repository"
 )
@@ -40,13 +40,13 @@ func TestUsecaseImpl_ListSeries(t *testing.T) {
 			setup: func(m *mocks) {
 				m.series.EXPECT().List(gomock.Any(), &repository.ListSeriesParams{
 					PageSize: 10,
-				}).Return(ent.SeriesSlice{{ID: 1}}, nil)
+				}).Return(entity.SeriesMulti{{ID: "id"}}, nil)
 			},
 			req: &ListSeriesRequest{
 				PageSize: 10,
 			},
 			expected: &ListSeriesResponse{
-				Series: ent.SeriesSlice{{ID: 1}},
+				Series: entity.SeriesMulti{{ID: "id"}},
 			},
 		},
 	}

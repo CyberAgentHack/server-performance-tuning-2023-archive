@@ -7,7 +7,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/CyberAgentHack/server-performance-tuning-2023/ent"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/errcode"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/repository"
 )
@@ -40,13 +40,13 @@ func TestUsecaseImpl_ListSeasons(t *testing.T) {
 			setup: func(m *mocks) {
 				m.season.EXPECT().List(gomock.Any(), &repository.ListSeasonsParams{
 					PageSize: 10,
-				}).Return(ent.Seasons{{ID: 1}}, nil)
+				}).Return(entity.Seasons{{ID: "id"}}, nil)
 			},
 			req: &ListSeasonsRequest{
 				PageSize: 10,
 			},
 			expected: &ListSeasonsResponse{
-				Seasons: ent.Seasons{{ID: 1}},
+				Seasons: entity.Seasons{{ID: "id"}},
 			},
 		},
 	}
