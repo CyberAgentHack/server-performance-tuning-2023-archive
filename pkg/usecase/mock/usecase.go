@@ -35,6 +35,36 @@ func (m *MockUsecase) EXPECT() *MockUsecaseMockRecorder {
 	return m.recorder
 }
 
+// BatchGetViewingHistories mocks base method.
+func (m *MockUsecase) BatchGetViewingHistories(ctx context.Context, req *usecase.BatchGetViewingHistoriesRequest) (*usecase.BatchGetViewingHistoriesResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "BatchGetViewingHistories", ctx, req)
+	ret0, _ := ret[0].(*usecase.BatchGetViewingHistoriesResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// BatchGetViewingHistories indicates an expected call of BatchGetViewingHistories.
+func (mr *MockUsecaseMockRecorder) BatchGetViewingHistories(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BatchGetViewingHistories", reflect.TypeOf((*MockUsecase)(nil).BatchGetViewingHistories), ctx, req)
+}
+
+// CreateViewingHistory mocks base method.
+func (m *MockUsecase) CreateViewingHistory(ctx context.Context, req *usecase.CreateViewingHistoryRequest) (*usecase.CreateViewingHistoryResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateViewingHistory", ctx, req)
+	ret0, _ := ret[0].(*usecase.CreateViewingHistoryResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateViewingHistory indicates an expected call of CreateViewingHistory.
+func (mr *MockUsecaseMockRecorder) CreateViewingHistory(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateViewingHistory", reflect.TypeOf((*MockUsecase)(nil).CreateViewingHistory), ctx, req)
+}
+
 // ListEpisodes mocks base method.
 func (m *MockUsecase) ListEpisodes(ctx context.Context, req *usecase.ListEpisodesRequest) (*usecase.ListEpisodesResponse, error) {
 	m.ctrl.T.Helper()

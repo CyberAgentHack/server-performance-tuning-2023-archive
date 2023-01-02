@@ -141,3 +141,56 @@ func (mr *MockSeasonMockRecorder) List(ctx, params interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockSeason)(nil).List), ctx, params)
 }
+
+// MockViewingHistory is a mock of ViewingHistory interface.
+type MockViewingHistory struct {
+	ctrl     *gomock.Controller
+	recorder *MockViewingHistoryMockRecorder
+}
+
+// MockViewingHistoryMockRecorder is the mock recorder for MockViewingHistory.
+type MockViewingHistoryMockRecorder struct {
+	mock *MockViewingHistory
+}
+
+// NewMockViewingHistory creates a new mock instance.
+func NewMockViewingHistory(ctrl *gomock.Controller) *MockViewingHistory {
+	mock := &MockViewingHistory{ctrl: ctrl}
+	mock.recorder = &MockViewingHistoryMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockViewingHistory) EXPECT() *MockViewingHistoryMockRecorder {
+	return m.recorder
+}
+
+// BatchGet mocks base method.
+func (m *MockViewingHistory) BatchGet(ctx context.Context, ids []string, userID string) (entity.ViewingHistories, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "BatchGet", ctx, ids, userID)
+	ret0, _ := ret[0].(entity.ViewingHistories)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// BatchGet indicates an expected call of BatchGet.
+func (mr *MockViewingHistoryMockRecorder) BatchGet(ctx, ids, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BatchGet", reflect.TypeOf((*MockViewingHistory)(nil).BatchGet), ctx, ids, userID)
+}
+
+// Create mocks base method.
+func (m *MockViewingHistory) Create(ctx context.Context, viewingHistory *entity.ViewingHistory) (*entity.ViewingHistory, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Create", ctx, viewingHistory)
+	ret0, _ := ret[0].(*entity.ViewingHistory)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Create indicates an expected call of Create.
+func (mr *MockViewingHistoryMockRecorder) Create(ctx, viewingHistory interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockViewingHistory)(nil).Create), ctx, viewingHistory)
+}
