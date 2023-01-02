@@ -34,5 +34,6 @@ func (s *Service) newRouter() chi.Router {
 	r.Route("/series", s.routeSeries)
 	r.Route("/seasons", s.routeSeason)
 	r.Route("/episodes", s.routeEpisode)
+	r.Route("/viewingHistories", s.routeViewingHistory)
 	return r
 }

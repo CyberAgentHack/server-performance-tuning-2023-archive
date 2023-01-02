@@ -6,6 +6,8 @@ package usecase
 import (
 	"context"
 
+	"github.com/go-playground/validator"
+
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/repository"
 )
 
@@ -13,12 +15,18 @@ var _ Usecase = (*UsecaseImpl)(nil)
 
 type Usecase interface {
 	ListEpisodes(ctx context.Context, req *ListEpisodesRequest) (*ListEpisodesResponse, error)
+
 	ListSeries(ctx context.Context, req *ListSeriesRequest) (*ListSeriesResponse, error)
+
 	ListSeasons(ctx context.Context, req *ListSeasonsRequest) (*ListSeasonsResponse, error)
+
+	CreateViewingHistory(ctx context.Context, req *CreateViewingHistoryRequest) (*CreateViewingHistoryResponse, error)
+	BatchGetViewingHistories(ctx context.Context, req *BatchGetViewingHistoriesRequest) (*BatchGetViewingHistoriesResponse, error)
 }
 
 type UsecaseImpl struct {
-	db *repository.Database
+	db       *repository.Database
+	validate *validator.Validate
 }
 
 type Config struct {
@@ -27,6 +35,7 @@ type Config struct {
 
 func NewUsecase(cfg *Config) *UsecaseImpl {
 	return &UsecaseImpl{
-		db: cfg.DB,
+		db:       cfg.DB,
+		validate: validator.New(),
 	}
 }

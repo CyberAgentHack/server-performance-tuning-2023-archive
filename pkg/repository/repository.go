@@ -10,9 +10,10 @@ import (
 )
 
 type Database struct {
-	Episode Episode
-	Series  Series
-	Season  Season
+	Episode        Episode
+	Series         Series
+	Season         Season
+	ViewingHistory ViewingHistory
 }
 
 type Episode interface {
@@ -41,4 +42,9 @@ type Season interface {
 type ListSeasonsParams struct {
 	PageSize int
 	SeriesID string
+}
+
+type ViewingHistory interface {
+	Create(ctx context.Context, viewingHistory *entity.ViewingHistory) (*entity.ViewingHistory, error)
+	BatchGet(ctx context.Context, ids []string, userID string) (entity.ViewingHistories, error)
 }

@@ -17,6 +17,7 @@ func TestNew(t *testing.T) {
 		db: db,
 	}
 	got := NewUsecase(cfg)
+	got.validate = nil
 	require.Equal(t, want, got)
 }
 
