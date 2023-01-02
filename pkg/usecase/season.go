@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 
-	"github.com/CyberAgentHack/server-performance-tuning-2023/ent"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/errcode"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/repository"
 )
@@ -14,7 +14,7 @@ type ListSeasonsRequest struct {
 }
 
 type ListSeasonsResponse struct {
-	Seasons ent.Seasons
+	Seasons entity.Seasons
 }
 
 func (u *UsecaseImpl) ListSeasons(ctx context.Context, req *ListSeasonsRequest) (*ListSeasonsResponse, error) {

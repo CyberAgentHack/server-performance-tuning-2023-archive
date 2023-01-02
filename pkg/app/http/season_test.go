@@ -11,7 +11,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/CyberAgentHack/server-performance-tuning-2023/ent"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/errcode"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/usecase"
 )
@@ -20,7 +20,7 @@ func TestListSeasons(t *testing.T) {
 	tests := []struct {
 		name         string
 		setup        func(m *mocks)
-		expected     ent.Seasons
+		expected     entity.Seasons
 		expectedCode int
 	}{
 		{
@@ -40,10 +40,10 @@ func TestListSeasons(t *testing.T) {
 					PageSize: 10,
 					SeriesID: "seriesId",
 				}).Return(&usecase.ListSeasonsResponse{
-					Seasons: ent.Seasons{{ID: 1}},
+					Seasons: entity.Seasons{{ID: "id"}},
 				}, nil)
 			},
-			expected: ent.Seasons{{ID: 1}},
+			expected: entity.Seasons{{ID: "id"}},
 		},
 	}
 
@@ -68,7 +68,7 @@ func TestListSeasons(t *testing.T) {
 				require.Equal(t, tt.expectedCode, res.StatusCode)
 				return
 			}
-			ret := ent.Seasons{}
+			ret := entity.Seasons{}
 			require.NoError(t, json.NewDecoder(w.Body).Decode(&ret))
 			require.Equal(t, tt.expected, ret)
 		})

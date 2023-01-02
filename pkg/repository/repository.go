@@ -6,7 +6,7 @@ package repository
 import (
 	"context"
 
-	"github.com/CyberAgentHack/server-performance-tuning-2023/ent"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
 )
 
 type Database struct {
@@ -17,7 +17,7 @@ type Database struct {
 
 type Episode interface {
 	GetCount(ctx context.Context, id string) (int, error)
-	List(ctx context.Context, params *ListEpisodesParams) (ent.Episodes, error)
+	List(ctx context.Context, params *ListEpisodesParams) (entity.Episodes, error)
 }
 
 type ListEpisodesParams struct {
@@ -27,7 +27,7 @@ type ListEpisodesParams struct {
 }
 
 type Series interface {
-	List(ctx context.Context, params *ListSeriesParams) (ent.SeriesSlice, error)
+	List(ctx context.Context, params *ListSeriesParams) (entity.SeriesMulti, error)
 }
 
 type ListSeriesParams struct {
@@ -35,7 +35,7 @@ type ListSeriesParams struct {
 }
 
 type Season interface {
-	List(ctx context.Context, params *ListSeasonsParams) (ent.Seasons, error)
+	List(ctx context.Context, params *ListSeasonsParams) (entity.Seasons, error)
 }
 
 type ListSeasonsParams struct {

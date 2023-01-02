@@ -8,7 +8,7 @@ import (
 	context "context"
 	reflect "reflect"
 
-	ent "github.com/CyberAgentHack/server-performance-tuning-2023/ent"
+	entity "github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
 	repository "github.com/CyberAgentHack/server-performance-tuning-2023/pkg/repository"
 	gomock "github.com/golang/mock/gomock"
 )
@@ -52,10 +52,10 @@ func (mr *MockEpisodeMockRecorder) GetCount(ctx, id interface{}) *gomock.Call {
 }
 
 // List mocks base method.
-func (m *MockEpisode) List(ctx context.Context, params *repository.ListEpisodesParams) (ent.Episodes, error) {
+func (m *MockEpisode) List(ctx context.Context, params *repository.ListEpisodesParams) (entity.Episodes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", ctx, params)
-	ret0, _ := ret[0].(ent.Episodes)
+	ret0, _ := ret[0].(entity.Episodes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -90,10 +90,10 @@ func (m *MockSeries) EXPECT() *MockSeriesMockRecorder {
 }
 
 // List mocks base method.
-func (m *MockSeries) List(ctx context.Context, params *repository.ListSeriesParams) (ent.SeriesSlice, error) {
+func (m *MockSeries) List(ctx context.Context, params *repository.ListSeriesParams) (entity.SeriesMulti, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", ctx, params)
-	ret0, _ := ret[0].(ent.SeriesSlice)
+	ret0, _ := ret[0].(entity.SeriesMulti)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -128,10 +128,10 @@ func (m *MockSeason) EXPECT() *MockSeasonMockRecorder {
 }
 
 // List mocks base method.
-func (m *MockSeason) List(ctx context.Context, params *repository.ListSeasonsParams) (ent.Seasons, error) {
+func (m *MockSeason) List(ctx context.Context, params *repository.ListSeasonsParams) (entity.Seasons, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", ctx, params)
-	ret0, _ := ret[0].(ent.Seasons)
+	ret0, _ := ret[0].(entity.Seasons)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
