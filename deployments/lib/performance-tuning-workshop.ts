@@ -4,7 +4,7 @@ import * as apprunner from 'aws-cdk-lib/aws-apprunner';
 import * as cr from 'aws-cdk-lib/custom-resources'
 import {CreateAutoScalingConfigurationCommandInput} from '@aws-sdk/client-apprunner'
 
-export class AppRunnerStack extends cdk.Stack {
+export class PerformanceTuningWorkshop extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
 
