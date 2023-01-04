@@ -10,3 +10,6 @@ run:
   command: go run main.go
   network:
     port: 9000
+  env:
+    - name: DB_SECRET_NAME
+      value: "TODO: secrets managerのidを設定する"
