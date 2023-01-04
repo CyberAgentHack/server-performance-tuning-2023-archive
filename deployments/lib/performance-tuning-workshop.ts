@@ -29,6 +29,8 @@ export class PerformanceTuningWorkshop extends cdk.Stack {
         ////////////////
         //// Aurora ////
         ////////////////
+        // NOTE: AppRunnerでVPC Connectorを設定するとアウトバウンドの通信がすべて接続先のVPCを経由するようになる。そのためアウトバウンド通信が可能なサブネットにリソースを配置する必要がある。
+        // https://aws.amazon.com/jp/blogs/containers/deep-dive-on-aws-app-runner-vpc-networking/
         const private_subnet = vpc.selectSubnets({subnetType: SubnetType.PRIVATE_WITH_EGRESS}).subnets
         const cluster = new rds.DatabaseCluster(this, 'Database', {
             engine: rds.DatabaseClusterEngine.auroraMysql({version: rds.AuroraMysqlEngineVersion.VER_3_02_1}),
@@ -62,7 +64,7 @@ export class PerformanceTuningWorkshop extends cdk.Stack {
                         type: 'BRANCH',
                         value: 'main'
                     },
-                    repositoryUrl: `https://github.com/${this.node.tryGetContext('gh-account-id')}/server-performance-tuning-2023`
+                    repositoryUrl: `https://github.com/${this.node.tryGetContext('gh-account-id')}/${this.node.tryGetContext('repositoryName')}`
                 },
                 autoDeploymentsEnabled: true
             },
