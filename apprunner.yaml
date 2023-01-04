@@ -1,0 +1,12 @@
+version: 1.0
+runtime: go1
+build:
+  commands:
+    build:
+      - go mod tidy
+
+run:
+  runtime-version: 1.18.9
+  command: go run main.go
+  network:
+    port: 9000
