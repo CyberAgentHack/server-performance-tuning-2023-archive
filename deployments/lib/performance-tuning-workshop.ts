@@ -5,11 +5,15 @@ import * as ec2 from "aws-cdk-lib/aws-ec2";
 import {Port, SecurityGroup, SubnetType} from "aws-cdk-lib/aws-ec2";
 import {Construct} from 'constructs';
 
+type PerformanceTuningWorkshopStackProps = cdk.StackProps & {
+    githubId: string
+}
+
 export class PerformanceTuningWorkshop extends cdk.Stack {
-    constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+    constructor(scope: Construct, id: string, props?: PerformanceTuningWorkshopStackProps) {
         super(scope, id, props);
 
-        const githubId = this.node.tryGetContext('gh-account-id')
+        const githubId = props?.githubId
         if (githubId == undefined) {
             throw new Error(`GitHub ID is Empty`)
         }

@@ -5,13 +5,12 @@ import {PerformanceTuningWorkshop} from "../lib/performance-tuning-workshop";
 
 const app = new cdk.App();
 const githubId = app.node.tryGetContext('gh-account-id')
-if (githubId == undefined) {
-    throw new Error(`GitHub ID is Empty`)
-}
 
-new PerformanceTuningWorkshop(app, `${githubId}PerformanceTuningWorkshopStack`, {
+new PerformanceTuningWorkshop(app, 'PerformanceTuningWorkshopStack', {
     env: {
         account: process.env.CDK_DEFAULT_ACCOUNT,
-        region: process.env.CDK_DEFAULT_REGION
-    }
+        region: process.env.CDK_DEFAULT_REGION,
+    },
+    stackName: `${githubId}PerformanceTuningWorkshopStack`,
+    githubId: githubId
 });
