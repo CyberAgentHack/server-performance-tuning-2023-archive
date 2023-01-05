@@ -9,7 +9,7 @@ type PerformanceTuningWorkshopStackProps = cdk.StackProps & {
     githubId: string
 }
 
-export class PerformanceTuningWorkshop extends cdk.Stack {
+export class PerformanceTuningWorkshopStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: PerformanceTuningWorkshopStackProps) {
         super(scope, id, props);
 
