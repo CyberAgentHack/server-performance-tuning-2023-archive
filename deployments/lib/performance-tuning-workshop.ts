@@ -8,6 +8,12 @@ import {Construct} from 'constructs';
 export class PerformanceTuningWorkshop extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
+
+        const githubId = this.node.tryGetContext('gh-account-id')
+        if (githubId == undefined) {
+            throw new Error(`GitHub ID is Empty`)
+        }
+
         /////////////////
         //// Network ////
         /////////////////
@@ -18,7 +24,7 @@ export class PerformanceTuningWorkshop extends cdk.Stack {
 
         // Aurora用セキュリティグループ
         const sgAurora = new SecurityGroup(this, 'AuroraSecurityGroup', {
-            securityGroupName: 'aurora',
+            securityGroupName: `${githubId}-aurora-sg`,
             vpc: vpc,
             allowAllOutbound: true
         })
@@ -31,7 +37,7 @@ export class PerformanceTuningWorkshop extends cdk.Stack {
         // NOTE: AppRunnerでVPC Connectorを設定するとアウトバウンドの通信がすべて接続先のVPCを経由するようになる。そのためアウトバウンド通信が可能なサブネットにリソースを配置する必要がある。
         // https://aws.amazon.com/jp/blogs/containers/deep-dive-on-aws-app-runner-vpc-networking/
         const private_subnet = vpc.selectSubnets({subnetType: SubnetType.PRIVATE_WITH_EGRESS}).subnets
-        const cluster = new rds.DatabaseCluster(this, 'Database', {
+        const cluster = new rds.DatabaseCluster(this, `${githubId}Aurora`, {
             engine: rds.DatabaseClusterEngine.auroraMysql({version: rds.AuroraMysqlEngineVersion.VER_3_02_1}),
             instanceProps: {
                 instanceType: ec2.InstanceType.of(ec2.InstanceClass.R6G, ec2.InstanceSize.XLARGE2),
@@ -41,6 +47,7 @@ export class PerformanceTuningWorkshop extends cdk.Stack {
                 securityGroups: [sgAurora],
                 vpc
             },
+            defaultDatabaseName: 'wsperf',
             removalPolicy: cdk.RemovalPolicy.DESTROY,
         })
 
@@ -48,7 +55,7 @@ export class PerformanceTuningWorkshop extends cdk.Stack {
         //// AppRunner ////
         ///////////////////
         new apprunner.CfnService(this, 'AppRunner', {
-            serviceName: "wsperf-app-runner",
+            serviceName: `${githubId}-wsperf-app-runner`,
             sourceConfiguration: {
                 authenticationConfiguration: {
                     connectionArn: this.node.tryGetContext('connection-arn')
@@ -71,7 +78,7 @@ export class PerformanceTuningWorkshop extends cdk.Stack {
                         type: 'BRANCH',
                         value: 'main'
                     },
-                    repositoryUrl: `https://github.com/${this.node.tryGetContext('gh-account-id')}/${this.node.tryGetContext('repositoryName')}`
+                    repositoryUrl: `https://github.com/${githubId}/${this.node.tryGetContext('repositoryName')}`
                 },
                 autoDeploymentsEnabled: true
             },
