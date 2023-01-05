@@ -1,5 +1,4 @@
 import * as cdk from 'aws-cdk-lib';
-import {CfnOutput} from 'aws-cdk-lib';
 import * as apprunner from 'aws-cdk-lib/aws-apprunner';
 import * as rds from 'aws-cdk-lib/aws-rds';
 import * as ec2 from "aws-cdk-lib/aws-ec2";
@@ -45,8 +44,6 @@ export class PerformanceTuningWorkshop extends cdk.Stack {
             removalPolicy: cdk.RemovalPolicy.DESTROY,
         })
 
-        new CfnOutput(this, 'dbSecretId', {value: cluster.secret?.secretName || ''})
-
         ///////////////////
         //// AppRunner ////
         ///////////////////
@@ -58,7 +55,17 @@ export class PerformanceTuningWorkshop extends cdk.Stack {
                 },
                 codeRepository: {
                     codeConfiguration: {
-                        configurationSource: 'REPOSITORY'
+                        configurationSource: 'REPOSITORY',
+                        codeConfigurationValues: {
+                            runtime: 'go1',
+                            buildCommand: 'go mod tidy',
+                            port: '9000',
+                            runtimeEnvironmentVariables: [{
+                                name: 'DB_SECRET_NAME',
+                                value: cluster.secret?.secretName
+                            }],
+                            startCommand: 'go run main.go',
+                        }
                     },
                     sourceCodeVersion: {
                         type: 'BRANCH',
