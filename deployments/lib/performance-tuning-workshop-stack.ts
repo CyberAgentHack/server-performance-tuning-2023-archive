@@ -71,10 +71,15 @@ export class PerformanceTuningWorkshopStack extends cdk.Stack {
                             runtime: 'GO_1',
                             buildCommand: 'go mod tidy',
                             port: '9000',
-                            runtimeEnvironmentVariables: [{
-                                name: 'DB_SECRET_NAME',
-                                value: cluster.secret?.secretName
-                            }],
+                            runtimeEnvironmentVariables: [
+                                {
+                                    name: 'ENV_DBSECRETNAME',
+                                    value: cluster.secret?.secretName
+                                }, {
+                                    name: 'ENV_ENVIRONMENT',
+                                    value: 'prd'
+                                }
+                            ],
                             startCommand: 'go run main.go',
                         }
                     },
@@ -85,6 +90,9 @@ export class PerformanceTuningWorkshopStack extends cdk.Stack {
                     repositoryUrl: `https://github.com/${githubId}/${this.node.tryGetContext('repositoryName')}`
                 },
                 autoDeploymentsEnabled: true
+            },
+            instanceConfiguration: {
+              instanceRoleArn: this.node.tryGetContext('appRunnerInstanceRoleArn')
             },
             networkConfiguration: {
                 egressConfiguration: {

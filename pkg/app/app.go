@@ -7,22 +7,24 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/kelseyhightower/envconfig"
-	"go.uber.org/zap"
-	"golang.org/x/sync/errgroup"
-
 	apphttp "github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/config"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/db"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/log"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/repository"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/repository/database"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/usecase"
+	"github.com/kelseyhightower/envconfig"
+	"go.uber.org/zap"
+	"golang.org/x/sync/errgroup"
 )
 
 type App struct {
-	logger      *zap.Logger
-	Level       string `default:"debug"`
-	Environment string `default:"local"`
-	Port        int    `default:"9000"`
+	logger       *zap.Logger
+	Level        string `default:"debug"`
+	Environment  string `default:"local"`
+	Port         int    `default:"9000"`
+	DbSecretName string
 }
 
 func New() (App, error) {
@@ -52,16 +54,27 @@ func (a *App) runWithContext(ctx context.Context) (err error) {
 	}
 	defer a.logger.Sync()
 
+	// config
+	cfg, err := config.NewConfig(a.Environment, a.DbSecretName)
+	if err != nil {
+		return err
+	}
+
+	mysql, err := db.NewMySQL(cfg.DBConfig)
+	if err != nil {
+		return err
+	}
+
 	// usecase
-	cfg := &usecase.Config{
+	usecaseCfg := &usecase.Config{
 		DB: &repository.Database{
-			Episode:        database.NewEpisode(),
+			Episode:        database.NewEpisode(mysql),
 			Series:         database.NewSeries(),
 			Season:         database.NewSeason(),
 			ViewingHistory: database.NewViewingHistory(),
 		},
 	}
-	uc := usecase.NewUsecase(cfg)
+	uc := usecase.NewUsecase(usecaseCfg)
 
 	// run http server
 	service := apphttp.NewService(uc, a.logger)
