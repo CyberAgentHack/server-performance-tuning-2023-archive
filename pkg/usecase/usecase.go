@@ -29,13 +29,9 @@ type UsecaseImpl struct {
 	validate *validator.Validate
 }
 
-type Config struct {
-	DB *repository.Database
-}
-
-func NewUsecase(cfg *Config) *UsecaseImpl {
+func NewUsecase(db *repository.Database) *UsecaseImpl {
 	return &UsecaseImpl{
-		db:       cfg.DB,
+		db:       db,
 		validate: validator.New(),
 	}
 }

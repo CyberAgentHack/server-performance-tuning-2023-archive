@@ -66,15 +66,13 @@ func (a *App) runWithContext(ctx context.Context) (err error) {
 	}
 
 	// usecase
-	usecaseCfg := &usecase.Config{
-		DB: &repository.Database{
-			Episode:        database.NewEpisode(mysql),
-			Series:         database.NewSeries(),
-			Season:         database.NewSeason(),
-			ViewingHistory: database.NewViewingHistory(),
-		},
+	database := &repository.Database{
+		Episode:        database.NewEpisode(mysql),
+		Series:         database.NewSeries(),
+		Season:         database.NewSeason(),
+		ViewingHistory: database.NewViewingHistory(),
 	}
-	uc := usecase.NewUsecase(usecaseCfg)
+	uc := usecase.NewUsecase(database)
 
 	// run http server
 	service := apphttp.NewService(uc, a.logger)
