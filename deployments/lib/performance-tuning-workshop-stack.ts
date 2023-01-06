@@ -66,9 +66,9 @@ export class PerformanceTuningWorkshopStack extends cdk.Stack {
                 },
                 codeRepository: {
                     codeConfiguration: {
-                        configurationSource: 'REPOSITORY',
+                        configurationSource: 'API',
                         codeConfigurationValues: {
-                            runtime: 'go1',
+                            runtime: 'GO_1',
                             buildCommand: 'go mod tidy',
                             port: '9000',
                             runtimeEnvironmentVariables: [{
