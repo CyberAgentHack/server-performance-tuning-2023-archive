@@ -38,6 +38,7 @@
     "@aws-cdk/aws-ecs:disableExplicitDeploymentControllerForCircuitBreaker": true,
     "vpcId": "vpc-094e2c8c92ed02f1f",
     "repositoryName": "server-performance-tuning-2023",
+    "appRunnerInstanceRoleArn": "arn:aws:iam::934998002958:role/wsperf-apprunner",
     "appRunnerSecurityGroupID": "sg-02514f6bcc65d0176",
     "vpcConnectorArn": "arn:aws:apprunner:ap-northeast-1:934998002958:vpcconnector/wsperf-vpc-connector/1/993c7f2257f04ee1af05f5ef3394b8c8",
     "autoScalingConfigurationArn": "arn:aws:apprunner:ap-northeast-1:934998002958:autoscalingconfiguration/wsperf-no-autoscaling-cfg/1/574a1817d76948e99411d9851f11e0ca"

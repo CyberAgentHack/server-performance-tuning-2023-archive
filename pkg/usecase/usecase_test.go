@@ -10,13 +10,10 @@ import (
 
 func TestNew(t *testing.T) {
 	db := &repository.Database{}
-	cfg := &Config{
-		DB: db,
-	}
 	want := &UsecaseImpl{
 		db: db,
 	}
-	got := NewUsecase(cfg)
+	got := NewUsecase(db)
 	got.validate = nil
 	require.Equal(t, want, got)
 }
