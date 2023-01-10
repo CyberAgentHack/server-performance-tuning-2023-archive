@@ -28,7 +28,7 @@ func TestCreateViewingHistory(t *testing.T) {
 			name:         "failed to bind request",
 			setup:        func(m *mocks) {},
 			body:         `{"id":` + viewingHistoryID + `}`,
-			expectedCode: http.StatusInternalServerError,
+			expectedCode: http.StatusBadRequest,
 		},
 		{
 			name: "failed to UpdateViewingHistory",
