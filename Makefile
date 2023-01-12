@@ -1,11 +1,3 @@
-.PHONY: setup
-setup:
-	sh scripts/setup.sh
-
-.PHONY: clean
-clean:
-	sh scripts/clean.sh
-
 .PHONY: test
 test:
 	go test -race -cover -parallel 4 ./...
