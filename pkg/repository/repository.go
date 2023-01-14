@@ -13,6 +13,7 @@ type Database struct {
 	Episode        Episode
 	Series         Series
 	Season         Season
+	Cast           Cast
 	ViewingHistory ViewingHistory
 }
 
@@ -47,4 +48,9 @@ type ListSeasonsParams struct {
 type ViewingHistory interface {
 	Create(ctx context.Context, viewingHistory *entity.ViewingHistory) (*entity.ViewingHistory, error)
 	BatchGet(ctx context.Context, ids []string, userID string) (entity.ViewingHistories, error)
+}
+
+type Cast interface {
+	Get(ctx context.Context, id string) (*entity.Cast, error)
+	Batch(ctx context.Context, ids []string) (entity.Casts, error)
 }

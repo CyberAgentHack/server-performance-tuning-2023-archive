@@ -10,12 +10,12 @@ import (
 )
 
 type Episode struct {
-	DB *sql.DB
+	db *sql.DB
 }
 
 func NewEpisode(db *sql.DB) *Episode {
 	return &Episode{
-		DB: db,
+		db: db,
 	}
 }
 
@@ -25,20 +25,29 @@ func (e *Episode) GetCount(ctx context.Context, id string) (int, error) {
 }
 
 func (e *Episode) List(ctx context.Context, params *repository.ListEpisodesParams) (entity.Episodes, error) {
-	rows, err := e.DB.QueryContext(ctx, "select * from episodes")
+	rows, err := e.db.QueryContext(ctx, "SELECT * FROM episodes")
 	if err != nil {
 		return nil, errcode.New(err)
 	}
 
 	var episodes entity.Episodes
 	for rows.Next() {
-		var id string
-		err := rows.Scan(&id)
+		episode := &entity.Episode{}
+		err := rows.Scan(
+			&episode.ID,
+			&episode.DisplayName,
+			&episode.Description,
+			&episode.ImageURL,
+			&episode.CastIDs,
+			&episode.SeasonID,
+			&episode.PublishStartTime,
+			&episode.DisplayOrder,
+		)
 		if err != nil {
 			break
 		}
 
-		episodes = append(episodes, &entity.Episode{ID: id})
+		episodes = append(episodes, episode)
 	}
 
 	if closeErr := rows.Close(); closeErr != nil {

@@ -68,8 +68,9 @@ func (a *App) runWithContext(ctx context.Context) (err error) {
 	// usecase
 	database := &repository.Database{
 		Episode:        database.NewEpisode(mysql),
-		Series:         database.NewSeries(),
-		Season:         database.NewSeason(),
+		Series:         database.NewSeries(mysql),
+		Season:         database.NewSeason(mysql),
+		Cast:           database.NewCast(mysql),
 		ViewingHistory: database.NewViewingHistory(),
 	}
 	uc := usecase.NewUsecase(database)
