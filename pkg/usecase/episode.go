@@ -9,7 +9,8 @@ import (
 )
 
 type ListEpisodesRequest struct {
-	PageSize int
+	Limit    int
+	Offset   int
 	SeriesID string
 	SeasonID string
 }
@@ -20,7 +21,8 @@ type ListEpisodesResponse struct {
 
 func (u *UsecaseImpl) ListEpisodes(ctx context.Context, req *ListEpisodesRequest) (*ListEpisodesResponse, error) {
 	params := &repository.ListEpisodesParams{
-		PageSize: req.PageSize,
+		Limit:    req.Limit,
+		Offset:   req.Offset,
 		SeriesID: req.SeriesID,
 		SeasonID: req.SeasonID,
 	}

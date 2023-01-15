@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/go-chi/chi"
 	"github.com/golang/mock/gomock"
 	"go.uber.org/zap"
 
@@ -28,4 +29,10 @@ func newService(m *mocks) *Service {
 	}
 	response.SetLogger(s.logger)
 	return s
+}
+
+func newMux(m *mocks) *chi.Mux {
+	mux := chi.NewMux()
+	newService(m).Register(mux)
+	return mux
 }

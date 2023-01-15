@@ -1,13 +1,11 @@
 package http
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	"github.com/go-chi/chi"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 
@@ -27,7 +25,7 @@ func TestListSeasons(t *testing.T) {
 			name: "failed to ListSeasons",
 			setup: func(m *mocks) {
 				m.uc.EXPECT().ListSeasons(gomock.Any(), &usecase.ListSeasonsRequest{
-					PageSize: 10,
+					Limit:    10,
 					SeriesID: "seriesId",
 				}).Return(nil, errcode.NewInternal("error"))
 			},
@@ -37,7 +35,7 @@ func TestListSeasons(t *testing.T) {
 			name: "success",
 			setup: func(m *mocks) {
 				m.uc.EXPECT().ListSeasons(gomock.Any(), &usecase.ListSeasonsRequest{
-					PageSize: 10,
+					Limit:    10,
 					SeriesID: "seriesId",
 				}).Return(&usecase.ListSeasonsResponse{
 					Seasons: entity.Seasons{{ID: "id"}},
@@ -52,17 +50,9 @@ func TestListSeasons(t *testing.T) {
 			m := newMocks(t)
 			tt.setup(m)
 
-			u := newService(m)
 			w := httptest.NewRecorder()
-			r := httptest.NewRequest(http.MethodGet, "/", nil)
-			q := r.URL.Query()
-			q.Add("pageSize", "10")
-			q.Add("seriesId", "seriesId")
-			r.URL.RawQuery = q.Encode()
-			rctx := chi.NewRouteContext()
-			r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, rctx))
-
-			u.listSeasons(w, r)
+			r := httptest.NewRequest(http.MethodGet, "/seasons?limit=10&seriesId=seriesId", nil)
+			newMux(m).ServeHTTP(w, r)
 			res := w.Result()
 			if res.StatusCode != http.StatusOK {
 				require.Equal(t, tt.expectedCode, res.StatusCode)

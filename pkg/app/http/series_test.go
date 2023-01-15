@@ -1,13 +1,11 @@
 package http
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	"github.com/go-chi/chi"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 
@@ -27,7 +25,7 @@ func TestListSeries(t *testing.T) {
 			name: "failed to ListSeries",
 			setup: func(m *mocks) {
 				m.uc.EXPECT().ListSeries(gomock.Any(), &usecase.ListSeriesRequest{
-					PageSize: 10,
+					Limit: 10,
 				}).Return(nil, errcode.NewInternal("error"))
 			},
 			expectedCode: http.StatusInternalServerError,
@@ -36,7 +34,7 @@ func TestListSeries(t *testing.T) {
 			name: "success",
 			setup: func(m *mocks) {
 				m.uc.EXPECT().ListSeries(gomock.Any(), &usecase.ListSeriesRequest{
-					PageSize: 10,
+					Limit: 10,
 				}).Return(&usecase.ListSeriesResponse{
 					Series: entity.SeriesMulti{{ID: "id"}},
 				}, nil)
@@ -50,16 +48,9 @@ func TestListSeries(t *testing.T) {
 			m := newMocks(t)
 			tt.setup(m)
 
-			u := newService(m)
 			w := httptest.NewRecorder()
-			r := httptest.NewRequest(http.MethodGet, "/", nil)
-			q := r.URL.Query()
-			q.Add("pageSize", "10")
-			r.URL.RawQuery = q.Encode()
-			rctx := chi.NewRouteContext()
-			r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, rctx))
-
-			u.listSeries(w, r)
+			r := httptest.NewRequest(http.MethodGet, "/series?limit=10", nil)
+			newMux(m).ServeHTTP(w, r)
 			res := w.Result()
 			if res.StatusCode != http.StatusOK {
 				require.Equal(t, tt.expectedCode, res.StatusCode)

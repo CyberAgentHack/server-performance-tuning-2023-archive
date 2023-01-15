@@ -5,6 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/errcode"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/repository"
 )
 
@@ -17,6 +18,34 @@ func NewSeries(db *sql.DB) *Series {
 }
 
 func (e *Series) List(ctx context.Context, params *repository.ListSeriesParams) (entity.SeriesMulti, error) {
-	// TODO
-	return entity.SeriesMulti{{ID: "seriesID"}}, nil
+	query := "SELECT * FROM seasons LIMIT ? OFFSET ?"
+	rows, err := e.db.QueryContext(ctx, query, params.Limit, params.Offset)
+	if err != nil {
+		return nil, errcode.New(err)
+	}
+
+	var seriesMulti entity.SeriesMulti
+	for rows.Next() {
+		series := &entity.Series{}
+		err = rows.Scan(
+			&series.ID,
+			&series.DisplayName,
+			&series.Description,
+			&series.ImageURL,
+			&series.CastIDs,
+			&series.DisplayOrder,
+			&series.IsSingleEpisode,
+			&series.EpisodeID,
+		)
+		if err != nil {
+			break
+		}
+
+		seriesMulti = append(seriesMulti, series)
+	}
+
+	if closeErr := rows.Close(); closeErr != nil {
+		return nil, errcode.New(closeErr)
+	}
+	return seriesMulti, nil
 }

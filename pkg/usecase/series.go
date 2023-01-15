@@ -9,7 +9,8 @@ import (
 )
 
 type ListSeriesRequest struct {
-	PageSize int
+	Limit  int
+	Offset int
 }
 
 type ListSeriesResponse struct {
@@ -18,7 +19,8 @@ type ListSeriesResponse struct {
 
 func (u *UsecaseImpl) ListSeries(ctx context.Context, req *ListSeriesRequest) (*ListSeriesResponse, error) {
 	params := &repository.ListSeriesParams{
-		PageSize: req.PageSize,
+		Limit:  req.Limit,
+		Offset: req.Offset,
 	}
 	series, err := u.db.Series.List(ctx, params)
 	if err != nil {

@@ -18,7 +18,8 @@ func (s *Service) listSeries(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	req := &usecase.ListSeriesRequest{
-		PageSize: request.QueryIntDefault(r, "pageSize", 20),
+		Limit:  request.QueryIntDefault(r, "limit", 20),
+		Offset: request.QueryInt(r, "offset"),
 	}
 	resp, err := s.usecase.ListSeries(ctx, req)
 	if err != nil {
