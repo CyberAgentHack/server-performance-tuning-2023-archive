@@ -9,7 +9,8 @@ import (
 )
 
 type ListSeasonsRequest struct {
-	PageSize int
+	Limit    int
+	Offset   int
 	SeriesID string
 }
 
@@ -19,7 +20,8 @@ type ListSeasonsResponse struct {
 
 func (u *UsecaseImpl) ListSeasons(ctx context.Context, req *ListSeasonsRequest) (*ListSeasonsResponse, error) {
 	params := &repository.ListSeasonsParams{
-		PageSize: req.PageSize,
+		Limit:    req.Limit,
+		Offset:   req.Offset,
 		SeriesID: req.SeriesID,
 	}
 	episodes, err := u.db.Season.List(ctx, params)

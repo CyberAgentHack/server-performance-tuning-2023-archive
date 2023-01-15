@@ -18,7 +18,8 @@ func (s *Service) listEpisodes(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	req := &usecase.ListEpisodesRequest{
-		PageSize: request.QueryIntDefault(r, "pageSize", 20),
+		Limit:    request.QueryIntDefault(r, "limit", 20),
+		Offset:   request.QueryInt(r, "offset"),
 		SeriesID: request.Query(r, "seriesId"),
 		SeasonID: request.Query(r, "seasonId"),
 	}

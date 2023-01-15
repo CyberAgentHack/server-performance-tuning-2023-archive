@@ -18,7 +18,8 @@ func (s *Service) listSeasons(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	req := &usecase.ListSeasonsRequest{
-		PageSize: request.QueryIntDefault(r, "pageSize", 20),
+		Limit:    request.QueryIntDefault(r, "limit", 20),
+		Offset:   request.QueryInt(r, "offset"),
 		SeriesID: request.Query(r, "seriesId"),
 	}
 	resp, err := s.usecase.ListSeasons(ctx, req)

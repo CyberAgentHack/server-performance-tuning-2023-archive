@@ -33,7 +33,7 @@ func (e *Episode) List(ctx context.Context, params *repository.ListEpisodesParam
 	var episodes entity.Episodes
 	for rows.Next() {
 		episode := &entity.Episode{}
-		err := rows.Scan(
+		err = rows.Scan(
 			&episode.ID,
 			&episode.DisplayName,
 			&episode.Description,
@@ -53,6 +53,5 @@ func (e *Episode) List(ctx context.Context, params *repository.ListEpisodesParam
 	if closeErr := rows.Close(); closeErr != nil {
 		return nil, errcode.New(closeErr)
 	}
-
 	return episodes, nil
 }

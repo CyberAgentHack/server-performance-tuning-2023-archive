@@ -23,7 +23,8 @@ type Episode interface {
 }
 
 type ListEpisodesParams struct {
-	PageSize int
+	Limit    int
+	Offset   int
 	SeriesID string
 	SeasonID string
 }
@@ -33,7 +34,8 @@ type Series interface {
 }
 
 type ListSeriesParams struct {
-	PageSize int
+	Limit  int
+	Offset int
 }
 
 type Season interface {
@@ -41,7 +43,8 @@ type Season interface {
 }
 
 type ListSeasonsParams struct {
-	PageSize int
+	Limit    int
+	Offset   int
 	SeriesID string
 }
 

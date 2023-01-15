@@ -60,12 +60,10 @@ func TestCreateViewingHistory(t *testing.T) {
 			m := newMocks(t)
 			tt.setup(m)
 
-			u := newService(m)
 			w := httptest.NewRecorder()
-			r := httptest.NewRequest(http.MethodPost, "/", bytes.NewBuffer([]byte(tt.body)))
+			r := httptest.NewRequest(http.MethodPost, "/viewingHistories", bytes.NewBuffer([]byte(tt.body)))
 			r.Header.Set("Content-Type", "application/json")
-
-			u.createViewingHistory(w, r)
+			newMux(m).ServeHTTP(w, r)
 			res := w.Result()
 			if res.StatusCode != http.StatusOK {
 				require.Equal(t, tt.expectedCode, res.StatusCode)
@@ -117,15 +115,10 @@ func TestListViewingHistories(t *testing.T) {
 			m := newMocks(t)
 			tt.setup(m)
 
-			u := newService(m)
 			w := httptest.NewRecorder()
-			r := httptest.NewRequest(http.MethodGet, "/", nil)
-			q := r.URL.Query()
-			q.Add("episodeIds", "episodeID")
-			r.URL.RawQuery = q.Encode()
+			r := httptest.NewRequest(http.MethodGet, "/viewingHistories?episodeIds=episodeID", nil)
 			r.Header.Set("userId", userID)
-
-			u.listViewingHistories(w, r)
+			newMux(m).ServeHTTP(w, r)
 			res := w.Result()
 			if res.StatusCode != http.StatusOK {
 				require.Equal(t, tt.expectedCode, res.StatusCode)
