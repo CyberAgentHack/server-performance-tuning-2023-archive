@@ -52,6 +52,5 @@ type ViewingHistory interface {
 }
 
 type Cast interface {
-	Get(ctx context.Context, id string) (*entity.Cast, error)
 	BatchGet(ctx context.Context, ids []string) (entity.Casts, error)
 }

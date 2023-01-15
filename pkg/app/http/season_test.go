@@ -18,7 +18,7 @@ func TestListSeasons(t *testing.T) {
 	tests := []struct {
 		name         string
 		setup        func(m *mocks)
-		expected     entity.Seasons
+		expected     *entity.ListSeasonsResponse
 		expectedCode int
 	}{
 		{
@@ -38,10 +38,14 @@ func TestListSeasons(t *testing.T) {
 					Limit:    10,
 					SeriesID: "seriesId",
 				}).Return(&usecase.ListSeasonsResponse{
-					Seasons: entity.Seasons{{ID: "id"}},
+					Seasons: entity.Seasons{{ID: "seasonId"}},
+					Casts:   entity.Casts{{ID: "castId"}},
 				}, nil)
 			},
-			expected: entity.Seasons{{ID: "id"}},
+			expected: &entity.ListSeasonsResponse{
+				Seasons: entity.Seasons{{ID: "seasonId"}},
+				Casts:   entity.Casts{{ID: "castId"}},
+			},
 		},
 	}
 
@@ -58,7 +62,7 @@ func TestListSeasons(t *testing.T) {
 				require.Equal(t, tt.expectedCode, res.StatusCode)
 				return
 			}
-			ret := entity.Seasons{}
+			ret := &entity.ListSeasonsResponse{}
 			require.NoError(t, json.NewDecoder(w.Body).Decode(&ret))
 			require.Equal(t, tt.expected, ret)
 		})

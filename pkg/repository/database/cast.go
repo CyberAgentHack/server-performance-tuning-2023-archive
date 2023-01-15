@@ -17,16 +17,6 @@ func NewCast(db *sql.DB) *Cast {
 	return &Cast{db: db}
 }
 
-func (c *Cast) Get(ctx context.Context, id string) (*entity.Cast, error) {
-	var cast *entity.Cast
-	err := c.db.QueryRowContext(ctx, "SELECT * FROM casts WHERE id = ?", id).
-		Scan(cast)
-	if err != nil {
-		return nil, errcode.New(err)
-	}
-	return cast, nil
-}
-
 func (c *Cast) BatchGet(ctx context.Context, ids []string) (entity.Casts, error) {
 	rows, err := c.db.QueryContext(ctx, `SELECT * FROM casts WHERE id IN (?`+strings.Repeat(",?", len(ids)-1)+`)`, ids)
 	if err != nil {

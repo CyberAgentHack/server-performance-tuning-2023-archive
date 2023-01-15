@@ -18,7 +18,7 @@ func TestListSeries(t *testing.T) {
 	tests := []struct {
 		name         string
 		setup        func(m *mocks)
-		expected     entity.SeriesMulti
+		expected     *entity.ListSeriesMultiResponse
 		expectedCode int
 	}{
 		{
@@ -36,10 +36,14 @@ func TestListSeries(t *testing.T) {
 				m.uc.EXPECT().ListSeries(gomock.Any(), &usecase.ListSeriesRequest{
 					Limit: 10,
 				}).Return(&usecase.ListSeriesResponse{
-					Series: entity.SeriesMulti{{ID: "id"}},
+					Series: entity.SeriesMulti{{ID: "seriesId"}},
+					Casts:  entity.Casts{{ID: "castId"}},
 				}, nil)
 			},
-			expected: entity.SeriesMulti{{ID: "id"}},
+			expected: &entity.ListSeriesMultiResponse{
+				SeriesMulti: entity.SeriesMulti{{ID: "seriesId"}},
+				Casts:       entity.Casts{{ID: "castId"}},
+			},
 		},
 	}
 
@@ -56,7 +60,7 @@ func TestListSeries(t *testing.T) {
 				require.Equal(t, tt.expectedCode, res.StatusCode)
 				return
 			}
-			ret := entity.SeriesMulti{}
+			ret := &entity.ListSeriesMultiResponse{}
 			require.NoError(t, json.NewDecoder(w.Body).Decode(&ret))
 			require.Equal(t, tt.expected, ret)
 		})

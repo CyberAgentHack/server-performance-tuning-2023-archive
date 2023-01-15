@@ -14,3 +14,16 @@ type Episode struct {
 }
 
 type Episodes []*Episode
+
+type ListEpisodesResponse struct {
+	Episodes Episodes `json:"episodes"`
+	Casts    Casts    `json:"casts"`
+}
+
+func (e Episodes) CastIDs() []string {
+	ret := make([]string, 0, len(e))
+	for i := range ret {
+		ret = append(ret, e[i].CastIDs...)
+	}
+	return ret
+}
