@@ -20,7 +20,6 @@ func (s *Service) listEpisodes(w http.ResponseWriter, r *http.Request) {
 	req := &usecase.ListEpisodesRequest{
 		Limit:    request.QueryIntDefault(r, "limit", 20),
 		Offset:   request.QueryInt(r, "offset"),
-		SeriesID: request.Query(r, "seriesId"),
 		SeasonID: request.Query(r, "seasonId"),
 	}
 	resp, err := s.usecase.ListEpisodes(ctx, req)

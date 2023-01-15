@@ -19,13 +19,17 @@ func NewEpisode(db *sql.DB) *Episode {
 	}
 }
 
-func (e *Episode) GetCount(ctx context.Context, id string) (int, error) {
-	// TODO
-	return 10, nil
-}
-
 func (e *Episode) List(ctx context.Context, params *repository.ListEpisodesParams) (entity.Episodes, error) {
-	rows, err := e.db.QueryContext(ctx, "SELECT * FROM episodes")
+	args := make([]any, 0, 3)
+	query := "SELECT * FROM episodes"
+	if params.SeasonID != "" {
+		query += " WHERE seasonId = ?"
+		args = append(args, params.SeasonID)
+	}
+	query += " LIMIT ? OFFSET ?"
+	args = append(args, params.Limit, params.Offset)
+
+	rows, err := e.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, errcode.New(err)
 	}

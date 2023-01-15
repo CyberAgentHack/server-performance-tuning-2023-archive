@@ -18,14 +18,12 @@ type Database struct {
 }
 
 type Episode interface {
-	GetCount(ctx context.Context, id string) (int, error)
 	List(ctx context.Context, params *ListEpisodesParams) (entity.Episodes, error)
 }
 
 type ListEpisodesParams struct {
 	Limit    int
 	Offset   int
-	SeriesID string
 	SeasonID string
 }
 
@@ -55,5 +53,5 @@ type ViewingHistory interface {
 
 type Cast interface {
 	Get(ctx context.Context, id string) (*entity.Cast, error)
-	Batch(ctx context.Context, ids []string) (entity.Casts, error)
+	BatchGet(ctx context.Context, ids []string) (entity.Casts, error)
 }

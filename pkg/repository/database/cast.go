@@ -27,7 +27,7 @@ func (c *Cast) Get(ctx context.Context, id string) (*entity.Cast, error) {
 	return cast, nil
 }
 
-func (c *Cast) Batch(ctx context.Context, ids []string) (entity.Casts, error) {
+func (c *Cast) BatchGet(ctx context.Context, ids []string) (entity.Casts, error) {
 	rows, err := c.db.QueryContext(ctx, `SELECT * FROM casts WHERE id IN (?`+strings.Repeat(",?", len(ids)-1)+`)`, ids)
 	if err != nil {
 		return nil, errcode.New(err)
