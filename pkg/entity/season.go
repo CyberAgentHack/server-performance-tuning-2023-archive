@@ -10,3 +10,16 @@ type Season struct {
 }
 
 type Seasons []*Season
+
+type ListSeasonsResponse struct {
+	Seasons Seasons `json:"seasons"`
+	Casts   Casts   `json:"casts"`
+}
+
+func (s Seasons) CastIDs() []string {
+	ret := make([]string, 0, len(s))
+	for i := range ret {
+		ret = append(ret, s[i].CastIDs...)
+	}
+	return ret
+}

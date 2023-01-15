@@ -7,6 +7,7 @@ import (
 	"context"
 
 	"github.com/go-playground/validator"
+	"golang.org/x/sync/singleflight"
 
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/repository"
 )
@@ -27,11 +28,13 @@ type Usecase interface {
 type UsecaseImpl struct {
 	db       *repository.Database
 	validate *validator.Validate
+	group    *singleflight.Group
 }
 
 func NewUsecase(db *repository.Database) *UsecaseImpl {
 	return &UsecaseImpl{
 		db:       db,
 		validate: validator.New(),
+		group:    &singleflight.Group{},
 	}
 }

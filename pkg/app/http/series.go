@@ -7,6 +7,7 @@ import (
 
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http/request"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http/response"
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/usecase"
 )
 
@@ -27,5 +28,5 @@ func (s *Service) listSeries(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response.OK(resp.Series, w, r)
+	response.OK(&entity.ListSeriesMultiResponse{SeriesMulti: resp.Series, Casts: resp.Casts}, w, r)
 }

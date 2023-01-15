@@ -16,6 +16,7 @@ type ListSeasonsRequest struct {
 
 type ListSeasonsResponse struct {
 	Seasons entity.Seasons
+	Casts   entity.Casts
 }
 
 func (u *UsecaseImpl) ListSeasons(ctx context.Context, req *ListSeasonsRequest) (*ListSeasonsResponse, error) {
@@ -24,10 +25,15 @@ func (u *UsecaseImpl) ListSeasons(ctx context.Context, req *ListSeasonsRequest) 
 		Offset:   req.Offset,
 		SeriesID: req.SeriesID,
 	}
-	episodes, err := u.db.Season.List(ctx, params)
+	seasons, err := u.db.Season.List(ctx, params)
 	if err != nil {
 		return nil, errcode.New(err)
 	}
 
-	return &ListSeasonsResponse{Seasons: episodes}, nil
+	castIDs := seasons.CastIDs()
+	casts, err := u.db.Cast.BatchGet(ctx, castIDs)
+	if err != nil {
+		return nil, errcode.New(err)
+	}
+	return &ListSeasonsResponse{Seasons: seasons, Casts: casts}, nil
 }

@@ -10,4 +10,10 @@ type Series struct {
 	IsSingleEpisode bool     `json:"isSingleEpisode"` // シングルエピソードか
 	EpisodeID       string   `json:"episodeId"`       // EpisodeID(SingleEpisodeがtrueのときのみ)
 }
+
 type SeriesMulti []*Series
+
+type ListSeriesMultiResponse struct {
+	SeriesMulti SeriesMulti `json:"series"`
+	Casts       Casts       `json:"casts"`
+}
