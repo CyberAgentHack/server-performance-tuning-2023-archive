@@ -194,3 +194,56 @@ func (mr *MockViewingHistoryMockRecorder) Create(ctx, viewingHistory interface{}
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockViewingHistory)(nil).Create), ctx, viewingHistory)
 }
+
+// MockCast is a mock of Cast interface.
+type MockCast struct {
+	ctrl     *gomock.Controller
+	recorder *MockCastMockRecorder
+}
+
+// MockCastMockRecorder is the mock recorder for MockCast.
+type MockCastMockRecorder struct {
+	mock *MockCast
+}
+
+// NewMockCast creates a new mock instance.
+func NewMockCast(ctrl *gomock.Controller) *MockCast {
+	mock := &MockCast{ctrl: ctrl}
+	mock.recorder = &MockCastMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockCast) EXPECT() *MockCastMockRecorder {
+	return m.recorder
+}
+
+// Batch mocks base method.
+func (m *MockCast) Batch(ctx context.Context, ids []string) (entity.Casts, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Batch", ctx, ids)
+	ret0, _ := ret[0].(entity.Casts)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Batch indicates an expected call of Batch.
+func (mr *MockCastMockRecorder) Batch(ctx, ids interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Batch", reflect.TypeOf((*MockCast)(nil).Batch), ctx, ids)
+}
+
+// Get mocks base method.
+func (m *MockCast) Get(ctx context.Context, id string) (*entity.Cast, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Get", ctx, id)
+	ret0, _ := ret[0].(*entity.Cast)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Get indicates an expected call of Get.
+func (mr *MockCastMockRecorder) Get(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockCast)(nil).Get), ctx, id)
+}
