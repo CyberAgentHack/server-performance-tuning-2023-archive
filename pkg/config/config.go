@@ -14,7 +14,7 @@ type Config struct {
 func NewConfig(env string, dbSecretName string) (*Config, error) {
 	var cfg *Config
 	switch env {
-	case "prd":
+	case "prd", "cloud9":
 		cfg = &Config{
 			DBConfig: &config.DBConfig{
 				SecretsManagerDBConfig: &config.SecretsManagerDBConfig{

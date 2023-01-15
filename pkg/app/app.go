@@ -22,7 +22,7 @@ import (
 type App struct {
 	logger       *zap.Logger
 	Level        string `default:"debug"`
-	Environment  string `default:"local"`
+	Environment  string `default:"cloud9"`
 	Port         int    `default:"9000"`
 	DbSecretName string
 }

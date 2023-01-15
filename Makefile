@@ -4,7 +4,7 @@ test:
 
 .PHONY: run-local
 run-local:
-	@go run main.go
+	@ENV_ENVIRONMENT=local go run main.go
 
 .PHONY: generate
 generate:
