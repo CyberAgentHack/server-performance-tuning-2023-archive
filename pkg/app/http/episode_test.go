@@ -26,7 +26,6 @@ func TestListEpisodes(t *testing.T) {
 			setup: func(m *mocks) {
 				m.uc.EXPECT().ListEpisodes(gomock.Any(), &usecase.ListEpisodesRequest{
 					Limit:    10,
-					SeriesID: "seriesId",
 					SeasonID: "seasonId",
 				}).Return(nil, errcode.NewInternal("error"))
 			},
@@ -37,7 +36,6 @@ func TestListEpisodes(t *testing.T) {
 			setup: func(m *mocks) {
 				m.uc.EXPECT().ListEpisodes(gomock.Any(), &usecase.ListEpisodesRequest{
 					Limit:    10,
-					SeriesID: "seriesId",
 					SeasonID: "seasonId",
 				}).Return(&usecase.ListEpisodesResponse{
 					Episodes: entity.Episodes{{ID: "id"}},
@@ -53,7 +51,7 @@ func TestListEpisodes(t *testing.T) {
 			tt.setup(m)
 
 			w := httptest.NewRecorder()
-			r := httptest.NewRequest(http.MethodGet, "/episodes?limit=10&seriesId=seriesId&seasonId=seasonId", nil)
+			r := httptest.NewRequest(http.MethodGet, "/episodes?limit=10&seasonId=seasonId", nil)
 			newMux(m).ServeHTTP(w, r)
 			res := w.Result()
 			if res.StatusCode != http.StatusOK {

@@ -11,7 +11,6 @@ import (
 type ListEpisodesRequest struct {
 	Limit    int
 	Offset   int
-	SeriesID string
 	SeasonID string
 }
 
@@ -23,7 +22,6 @@ func (u *UsecaseImpl) ListEpisodes(ctx context.Context, req *ListEpisodesRequest
 	params := &repository.ListEpisodesParams{
 		Limit:    req.Limit,
 		Offset:   req.Offset,
-		SeriesID: req.SeriesID,
 		SeasonID: req.SeasonID,
 	}
 	episodes, err := u.db.Episode.List(ctx, params)

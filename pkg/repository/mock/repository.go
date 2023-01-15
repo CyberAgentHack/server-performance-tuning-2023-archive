@@ -36,21 +36,6 @@ func (m *MockEpisode) EXPECT() *MockEpisodeMockRecorder {
 	return m.recorder
 }
 
-// GetCount mocks base method.
-func (m *MockEpisode) GetCount(ctx context.Context, id string) (int, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetCount", ctx, id)
-	ret0, _ := ret[0].(int)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetCount indicates an expected call of GetCount.
-func (mr *MockEpisodeMockRecorder) GetCount(ctx, id interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCount", reflect.TypeOf((*MockEpisode)(nil).GetCount), ctx, id)
-}
-
 // List mocks base method.
 func (m *MockEpisode) List(ctx context.Context, params *repository.ListEpisodesParams) (entity.Episodes, error) {
 	m.ctrl.T.Helper()
@@ -218,19 +203,19 @@ func (m *MockCast) EXPECT() *MockCastMockRecorder {
 	return m.recorder
 }
 
-// Batch mocks base method.
-func (m *MockCast) Batch(ctx context.Context, ids []string) (entity.Casts, error) {
+// BatchGet mocks base method.
+func (m *MockCast) BatchGet(ctx context.Context, ids []string) (entity.Casts, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Batch", ctx, ids)
+	ret := m.ctrl.Call(m, "BatchGet", ctx, ids)
 	ret0, _ := ret[0].(entity.Casts)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// Batch indicates an expected call of Batch.
-func (mr *MockCastMockRecorder) Batch(ctx, ids interface{}) *gomock.Call {
+// BatchGet indicates an expected call of BatchGet.
+func (mr *MockCastMockRecorder) BatchGet(ctx, ids interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Batch", reflect.TypeOf((*MockCast)(nil).Batch), ctx, ids)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BatchGet", reflect.TypeOf((*MockCast)(nil).BatchGet), ctx, ids)
 }
 
 // Get mocks base method.
