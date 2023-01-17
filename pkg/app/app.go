@@ -62,10 +62,11 @@ func (a *App) runWithContext(ctx context.Context) (err error) {
 	}
 
 	if cfg.TraceConfig.EnableTracing {
-		err = config.ConfigureTraceProvider()
+		cleanupTP, err := config.ConfigureTraceProvider(a.logger)
 		if err != nil {
 			return err
 		}
+		defer cleanupTP()
 	}
 
 	mysql, err := db.NewMySQL(cfg.DBConfig)

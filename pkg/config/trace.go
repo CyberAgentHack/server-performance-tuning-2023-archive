@@ -2,6 +2,8 @@ package config
 
 import (
 	"context"
+	"log"
+	"time"
 
 	"go.opentelemetry.io/contrib/propagators/aws/xray"
 	"go.opentelemetry.io/otel"
@@ -9,22 +11,22 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.12.0"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
 
-func ConfigureTraceProvider() error {
+func ConfigureTraceProvider(logger *zap.Logger) (func(), error) {
 	ctx := context.Background()
 	res := resource.NewWithAttributes(semconv.SchemaURL, semconv.ServiceNameKey.String("server-performance-tuning-2023"))
 	endpoint := "0.0.0.0:4317"
 	traceExporter, err := otlptracegrpc.New(ctx, otlptracegrpc.WithInsecure(), otlptracegrpc.WithEndpoint(endpoint), otlptracegrpc.WithDialOption(grpc.WithBlock()))
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	idg := xray.NewIDGenerator()
 
-	// todo: shutdown
 	tp := sdktrace.NewTracerProvider(
 		sdktrace.WithSampler(sdktrace.AlwaysSample()),
 		sdktrace.WithResource(res),
@@ -34,5 +36,13 @@ func ConfigureTraceProvider() error {
 
 	otel.SetTracerProvider(tp)
 
-	return nil
+	cleanup := func() {
+		ctx, cancel := context.WithTimeout(context.Background(), time.Duration(30*time.Second))
+		defer cancel()
+		if err := tp.Shutdown(ctx); err != nil {
+			log.Printf("failed to shutdown TracerProvider: %v", err)
+		}
+	}
+
+	return cleanup, nil
 }
