@@ -8,11 +8,10 @@ import (
 )
 
 type Config struct {
-	DBConfig      *config.DBConfig
-	RedisEndpoint string
+	DBConfig *config.DBConfig
 }
 
-func NewConfig(env string, dbSecretName string, redisEndpoint string) (*Config, error) {
+func NewConfig(env string, dbSecretName string) (*Config, error) {
 	var cfg *Config
 	switch env {
 	case "prd", "cloud9":
@@ -22,7 +21,6 @@ func NewConfig(env string, dbSecretName string, redisEndpoint string) (*Config, 
 					SecretID: dbSecretName,
 				},
 			},
-			RedisEndpoint: redisEndpoint,
 		}
 	case "local":
 		cfg = &Config{
@@ -35,7 +33,6 @@ func NewConfig(env string, dbSecretName string, redisEndpoint string) (*Config, 
 					DB:       "wsperf",
 				},
 			},
-			RedisEndpoint: "localhost:6379",
 		}
 	default:
 		return nil, errcode.New(fmt.Errorf("unknown Environment: %s", env))
