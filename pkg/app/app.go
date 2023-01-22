@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os/signal"
 	"syscall"
+	"time"
 
 	apphttp "github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/config"
@@ -20,11 +21,12 @@ import (
 )
 
 type App struct {
-	logger       *zap.Logger
-	Level        string `default:"debug"`
-	Environment  string `default:"cloud9"`
-	Port         int    `default:"9000"`
-	DbSecretName string
+	logger        *zap.Logger
+	Level         string `default:"debug"`
+	Environment   string `default:"cloud9"`
+	Port          int    `default:"9000"`
+	DbSecretName  string
+	RedisEndpoint string
 }
 
 func New() (App, error) {
@@ -55,12 +57,25 @@ func (a *App) runWithContext(ctx context.Context) (err error) {
 	defer a.logger.Sync()
 
 	// config
-	cfg, err := config.NewConfig(a.Environment, a.DbSecretName)
+	cfg, err := config.NewConfig(a.Environment, a.DbSecretName, a.RedisEndpoint)
 	if err != nil {
 		return err
 	}
 
 	mysql, err := db.NewMySQL(cfg.DBConfig)
+	if err != nil {
+		return err
+	}
+
+	//// TODO: 空のredisのクライアントをここで生成しているので実装してください。
+	//// (1):
+	//// (2):
+	redis, err := db.NewRedisClient(cfg.RedisEndpoint)
+	if err != nil {
+		return err
+	}
+
+	err = redis.Set("unko", "unko", time.Hour)
 	if err != nil {
 		return err
 	}
