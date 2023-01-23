@@ -20,11 +20,12 @@ import (
 )
 
 type App struct {
-	logger       *zap.Logger
-	Level        string `default:"debug"`
-	Environment  string `default:"cloud9"`
-	Port         int    `default:"9000"`
-	DbSecretName string
+	logger        *zap.Logger
+	Level         string `default:"debug"`
+	Environment   string `default:"cloud9"`
+	Port          int    `default:"9000"`
+	DbSecretName  string
+	RedisEndpoint string
 }
 
 func New() (App, error) {
@@ -55,12 +56,18 @@ func (a *App) runWithContext(ctx context.Context) (err error) {
 	defer a.logger.Sync()
 
 	// config
-	cfg, err := config.NewConfig(a.Environment, a.DbSecretName)
+	cfg, err := config.NewConfig(a.Environment, a.DbSecretName, a.RedisEndpoint)
 	if err != nil {
 		return err
 	}
 
 	mysql, err := db.NewMySQL(cfg.DBConfig)
+	if err != nil {
+		return err
+	}
+
+	// NOTE: redisクライアントのサンプル実装
+	_, err = db.NewRedisClient(cfg.RedisEndpoint)
 	if err != nil {
 		return err
 	}
