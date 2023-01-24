@@ -32,7 +32,7 @@ func (e *Series) List(ctx context.Context, params *repository.ListSeriesParams) 
 			&series.DisplayName,
 			&series.Description,
 			&series.ImageURL,
-			&series.CastIDs,
+			&series.GenreIDs,
 			&series.DisplayOrder,
 			&series.IsSingleEpisode,
 			&series.EpisodeID,

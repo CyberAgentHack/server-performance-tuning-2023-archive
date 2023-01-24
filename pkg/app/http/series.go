@@ -28,5 +28,5 @@ func (s *Service) listSeries(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response.OK(&entity.ListSeriesMultiResponse{SeriesMulti: resp.Series, Casts: resp.Casts}, w, r)
+	response.OK(&entity.ListSeriesMultiResponse{SeriesMulti: resp.Series, Genres: resp.Genres}, w, r)
 }

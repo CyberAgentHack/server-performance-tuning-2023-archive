@@ -16,7 +16,7 @@ type ListEpisodesRequest struct {
 
 type ListEpisodesResponse struct {
 	Episodes entity.Episodes
-	Casts    entity.Casts
+	Genres   entity.Genres
 }
 
 func (u *UsecaseImpl) ListEpisodes(ctx context.Context, req *ListEpisodesRequest) (*ListEpisodesResponse, error) {
@@ -30,10 +30,13 @@ func (u *UsecaseImpl) ListEpisodes(ctx context.Context, req *ListEpisodesRequest
 		return nil, errcode.New(err)
 	}
 
-	castIDs := episodes.CastIDs()
-	casts, err := u.db.Cast.BatchGet(ctx, castIDs)
-	if err != nil {
-		return nil, errcode.New(err)
+	genres := make(entity.Genres, 0, len(episodes))
+	for i := range episodes {
+		c, err := u.db.Genre.BatchGet(ctx, episodes[i].GenreIDs)
+		if err != nil {
+			return nil, errcode.New(err)
+		}
+		genres = append(genres, c...)
 	}
-	return &ListEpisodesResponse{Episodes: episodes, Casts: casts}, nil
+	return &ListEpisodesResponse{Episodes: episodes, Genres: genres}, nil
 }

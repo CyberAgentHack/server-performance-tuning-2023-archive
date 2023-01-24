@@ -37,12 +37,12 @@ func TestListSeries(t *testing.T) {
 					Limit: 10,
 				}).Return(&usecase.ListSeriesResponse{
 					Series: entity.SeriesMulti{{ID: "seriesId"}},
-					Casts:  entity.Casts{{ID: "castId"}},
+					Genres: entity.Genres{{ID: "genreId"}},
 				}, nil)
 			},
 			expected: &entity.ListSeriesMultiResponse{
 				SeriesMulti: entity.SeriesMulti{{ID: "seriesId"}},
-				Casts:       entity.Casts{{ID: "castId"}},
+				Genres:      entity.Genres{{ID: "genreId"}},
 			},
 		},
 	}

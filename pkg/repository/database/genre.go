@@ -9,21 +9,21 @@ import (
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/errcode"
 )
 
-type Cast struct {
+type Genre struct {
 	db *sql.DB
 }
 
-func NewCast(db *sql.DB) *Cast {
-	return &Cast{db: db}
+func NewGenre(db *sql.DB) *Genre {
+	return &Genre{db: db}
 }
 
-func (c *Cast) BatchGet(ctx context.Context, ids []string) (entity.Casts, error) {
-	rows, err := c.db.QueryContext(ctx, `SELECT * FROM casts WHERE id IN (?`+strings.Repeat(",?", len(ids)-1)+`)`, ids)
+func (c *Genre) BatchGet(ctx context.Context, ids []string) (entity.Genres, error) {
+	rows, err := c.db.QueryContext(ctx, `SELECT * FROM genres WHERE id IN (?`+strings.Repeat(",?", len(ids)-1)+`)`, ids)
 	if err != nil {
 		return nil, errcode.New(err)
 	}
 
-	var casts entity.Casts
+	var genres entity.Genres
 	for rows.Next() {
 		var id string
 		err := rows.Scan(&id)
@@ -31,12 +31,12 @@ func (c *Cast) BatchGet(ctx context.Context, ids []string) (entity.Casts, error)
 			break
 		}
 
-		casts = append(casts, &entity.Cast{ID: id})
+		genres = append(genres, &entity.Genre{ID: id})
 	}
 
 	if closeErr := rows.Close(); closeErr != nil {
 		return nil, errcode.New(closeErr)
 	}
 
-	return casts, nil
+	return genres, nil
 }
