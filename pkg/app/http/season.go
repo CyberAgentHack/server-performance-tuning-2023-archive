@@ -29,5 +29,5 @@ func (s *Service) listSeasons(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response.OK(&entity.ListSeasonsResponse{Seasons: resp.Seasons, Casts: resp.Casts}, w, r)
+	response.OK(&entity.ListSeasonsResponse{Seasons: resp.Seasons, Genres: resp.Genres}, w, r)
 }

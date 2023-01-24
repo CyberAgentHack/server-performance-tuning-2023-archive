@@ -13,7 +13,7 @@ type Database struct {
 	Episode        Episode
 	Series         Series
 	Season         Season
-	Cast           Cast
+	Genre          Genre
 	ViewingHistory ViewingHistory
 }
 
@@ -51,6 +51,6 @@ type ViewingHistory interface {
 	BatchGet(ctx context.Context, ids []string, userID string) (entity.ViewingHistories, error)
 }
 
-type Cast interface {
-	BatchGet(ctx context.Context, ids []string) (entity.Casts, error)
+type Genre interface {
+	BatchGet(ctx context.Context, ids []string) (entity.Genres, error)
 }

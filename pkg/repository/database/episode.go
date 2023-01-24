@@ -42,7 +42,7 @@ func (e *Episode) List(ctx context.Context, params *repository.ListEpisodesParam
 			&episode.DisplayName,
 			&episode.Description,
 			&episode.ImageURL,
-			&episode.CastIDs,
+			&episode.GenreIDs,
 			&episode.SeasonID,
 			&episode.PublishStartTime,
 			&episode.DisplayOrder,

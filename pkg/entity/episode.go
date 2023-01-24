@@ -7,7 +7,7 @@ type Episode struct {
 	DisplayName      string    `json:"displayName"`      // 表示名
 	Description      string    `json:"description"`      // 説明
 	ImageURL         string    `json:"imageUrl"`         // 画像URL
-	CastIDs          []string  `json:"castIds"`          // キャストIDs
+	GenreIDs         []string  `json:"genreIds"`         // ジャンルIDs
 	SeasonID         string    `json:"seasonId"`         // シーズンID
 	PublishStartTime time.Time `json:"publishStartTime"` // 公開開始時刻
 	DisplayOrder     int32     `json:"displayOrder"`     // 表示順
@@ -17,13 +17,13 @@ type Episodes []*Episode
 
 type ListEpisodesResponse struct {
 	Episodes Episodes `json:"episodes"`
-	Casts    Casts    `json:"casts"`
+	Genres   Genres   `json:"genres"`
 }
 
-func (e Episodes) CastIDs() []string {
+func (e Episodes) GenreIDs() []string {
 	ret := make([]string, 0, len(e))
 	for i := range ret {
-		ret = append(ret, e[i].CastIDs...)
+		ret = append(ret, e[i].GenreIDs...)
 	}
 	return ret
 }

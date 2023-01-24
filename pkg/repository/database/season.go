@@ -39,7 +39,7 @@ func (e *Season) List(ctx context.Context, params *repository.ListSeasonsParams)
 			&season.ID,
 			&season.DisplayName,
 			&season.ImageURL,
-			&season.CastIDs,
+			&season.GenreIDs,
 			&season.SeriesID,
 			&season.DisplayOrder,
 		)

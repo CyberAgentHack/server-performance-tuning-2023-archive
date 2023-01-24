@@ -180,40 +180,40 @@ func (mr *MockViewingHistoryMockRecorder) Create(ctx, viewingHistory interface{}
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockViewingHistory)(nil).Create), ctx, viewingHistory)
 }
 
-// MockCast is a mock of Cast interface.
-type MockCast struct {
+// MockGenre is a mock of Genre interface.
+type MockGenre struct {
 	ctrl     *gomock.Controller
-	recorder *MockCastMockRecorder
+	recorder *MockGenreMockRecorder
 }
 
-// MockCastMockRecorder is the mock recorder for MockCast.
-type MockCastMockRecorder struct {
-	mock *MockCast
+// MockGenreMockRecorder is the mock recorder for MockGenre.
+type MockGenreMockRecorder struct {
+	mock *MockGenre
 }
 
-// NewMockCast creates a new mock instance.
-func NewMockCast(ctrl *gomock.Controller) *MockCast {
-	mock := &MockCast{ctrl: ctrl}
-	mock.recorder = &MockCastMockRecorder{mock}
+// NewMockGenre creates a new mock instance.
+func NewMockGenre(ctrl *gomock.Controller) *MockGenre {
+	mock := &MockGenre{ctrl: ctrl}
+	mock.recorder = &MockGenreMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockCast) EXPECT() *MockCastMockRecorder {
+func (m *MockGenre) EXPECT() *MockGenreMockRecorder {
 	return m.recorder
 }
 
 // BatchGet mocks base method.
-func (m *MockCast) BatchGet(ctx context.Context, ids []string) (entity.Casts, error) {
+func (m *MockGenre) BatchGet(ctx context.Context, ids []string) (entity.Genres, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BatchGet", ctx, ids)
-	ret0, _ := ret[0].(entity.Casts)
+	ret0, _ := ret[0].(entity.Genres)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // BatchGet indicates an expected call of BatchGet.
-func (mr *MockCastMockRecorder) BatchGet(ctx, ids interface{}) *gomock.Call {
+func (mr *MockGenreMockRecorder) BatchGet(ctx, ids interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BatchGet", reflect.TypeOf((*MockCast)(nil).BatchGet), ctx, ids)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BatchGet", reflect.TypeOf((*MockGenre)(nil).BatchGet), ctx, ids)
 }

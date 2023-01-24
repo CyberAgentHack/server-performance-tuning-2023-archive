@@ -29,5 +29,5 @@ func (s *Service) listEpisodes(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response.OK(&entity.ListEpisodesResponse{Episodes: resp.Episodes, Casts: resp.Casts}, w, r)
+	response.OK(&entity.ListEpisodesResponse{Episodes: resp.Episodes, Genres: resp.Genres}, w, r)
 }

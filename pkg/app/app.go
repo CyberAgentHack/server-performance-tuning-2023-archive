@@ -77,7 +77,7 @@ func (a *App) runWithContext(ctx context.Context) (err error) {
 		Episode:        database.NewEpisode(mysql),
 		Series:         database.NewSeries(mysql),
 		Season:         database.NewSeason(mysql),
-		Cast:           database.NewCast(mysql),
+		Genre:          database.NewGenre(mysql),
 		ViewingHistory: database.NewViewingHistory(),
 	}
 	uc := usecase.NewUsecase(database)
