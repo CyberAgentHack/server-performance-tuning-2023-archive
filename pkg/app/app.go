@@ -61,6 +61,13 @@ func (a *App) runWithContext(ctx context.Context) (err error) {
 		return err
 	}
 
+	if cfg.TraceConfig.EnableTracing {
+		err = config.ConfigureTraceProvider()
+		if err != nil {
+			return err
+		}
+	}
+
 	mysql, err := db.NewMySQL(cfg.DBConfig)
 	if err != nil {
 		return err
