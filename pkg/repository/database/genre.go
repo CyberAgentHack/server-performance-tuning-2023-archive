@@ -18,6 +18,8 @@ func NewGenre(db *sql.DB) *Genre {
 }
 
 func (c *Genre) BatchGet(ctx context.Context, ids []string) (entity.Genres, error) {
+	ctx, span := tracer.Start(ctx, "database.Cast#BatchGet")
+	defer span.End()
 	rows, err := c.db.QueryContext(ctx, `SELECT * FROM genres WHERE id IN (?`+strings.Repeat(",?", len(ids)-1)+`)`, ids)
 	if err != nil {
 		return nil, errcode.New(err)

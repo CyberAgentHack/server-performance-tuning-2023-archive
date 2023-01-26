@@ -18,6 +18,9 @@ func NewSeason(db *sql.DB) *Season {
 }
 
 func (e *Season) List(ctx context.Context, params *repository.ListSeasonsParams) (entity.Seasons, error) {
+	ctx, span := tracer.Start(ctx, "database.Season#List")
+	defer span.End()
+
 	args := make([]any, 0, 3)
 	query := "SELECT * FROM seasons"
 	if params.SeriesID != "" {

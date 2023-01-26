@@ -20,6 +20,9 @@ type ListEpisodesResponse struct {
 }
 
 func (u *UsecaseImpl) ListEpisodes(ctx context.Context, req *ListEpisodesRequest) (*ListEpisodesResponse, error) {
+	ctx, span := tracer.Start(ctx, "usecase.UsecaseImpl#ListEpisodes")
+	defer span.End()
+
 	params := &repository.ListEpisodesParams{
 		Limit:    req.Limit,
 		Offset:   req.Offset,

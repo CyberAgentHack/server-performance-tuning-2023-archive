@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap"
 )
 
-var tracer = otel.Tracer("server-performance-tuning-2023")
+var tracer = otel.Tracer("github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http")
 
 type ServerParams struct {
 	Port    int

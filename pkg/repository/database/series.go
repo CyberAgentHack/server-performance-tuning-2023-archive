@@ -18,6 +18,9 @@ func NewSeries(db *sql.DB) *Series {
 }
 
 func (e *Series) List(ctx context.Context, params *repository.ListSeriesParams) (entity.SeriesMulti, error) {
+	ctx, span := tracer.Start(ctx, "database.Series#List")
+	defer span.End()
+
 	query := "SELECT * FROM seasons LIMIT ? OFFSET ?"
 	rows, err := e.db.QueryContext(ctx, query, params.Limit, params.Offset)
 	if err != nil {
