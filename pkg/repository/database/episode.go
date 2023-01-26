@@ -20,6 +20,9 @@ func NewEpisode(db *sql.DB) *Episode {
 }
 
 func (e *Episode) List(ctx context.Context, params *repository.ListEpisodesParams) (entity.Episodes, error) {
+	ctx, span := tracer.Start(ctx, "database.Episode#List")
+	defer span.End()
+
 	args := make([]any, 0, 3)
 	query := "SELECT * FROM episodes"
 	if params.SeasonID != "" {

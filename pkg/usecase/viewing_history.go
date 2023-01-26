@@ -23,6 +23,9 @@ func (c *CreateViewingHistoryRequest) validate() error {
 }
 
 func (u *UsecaseImpl) CreateViewingHistory(ctx context.Context, req *CreateViewingHistoryRequest) (*CreateViewingHistoryResponse, error) {
+	ctx, span := tracer.Start(ctx, "usecase.UsecaseImpl#CreateViewingHistory")
+	defer span.End()
+
 	if err := req.validate(); err != nil {
 		return nil, errcode.New(err)
 	}
@@ -44,6 +47,9 @@ type BatchGetViewingHistoriesResponse struct {
 }
 
 func (u *UsecaseImpl) BatchGetViewingHistories(ctx context.Context, req *BatchGetViewingHistoriesRequest) (*BatchGetViewingHistoriesResponse, error) {
+	ctx, span := tracer.Start(ctx, "usecase.UsecaseImpl#BatchGetViewingHistories")
+	defer span.End()
+
 	if err := u.validate.Struct(req); err != nil {
 		return nil, errcode.New(err)
 	}

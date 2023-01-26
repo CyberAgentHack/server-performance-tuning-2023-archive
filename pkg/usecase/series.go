@@ -19,6 +19,9 @@ type ListSeriesResponse struct {
 }
 
 func (u *UsecaseImpl) ListSeries(ctx context.Context, req *ListSeriesRequest) (*ListSeriesResponse, error) {
+	ctx, span := tracer.Start(ctx, "usecase.UsecaseImpl#ListSeries")
+	defer span.End()
+
 	const key = "series"
 	params := &repository.ListSeriesParams{
 		Limit:  req.Limit,
