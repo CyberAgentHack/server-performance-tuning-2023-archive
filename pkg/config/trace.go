@@ -2,7 +2,6 @@ package config
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"go.opentelemetry.io/contrib/propagators/aws/xray"
@@ -40,7 +39,7 @@ func ConfigureTraceProvider(logger *zap.Logger) (func(), error) {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Duration(30*time.Second))
 		defer cancel()
 		if err := tp.Shutdown(ctx); err != nil {
-			log.Printf("failed to shutdown TracerProvider: %v", err)
+			logger.Error("failed to shutdown TracerProvider", zap.Error(err))
 		}
 	}
 
