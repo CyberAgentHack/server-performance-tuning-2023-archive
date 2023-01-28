@@ -23,7 +23,7 @@ type App struct {
 	logger        *zap.Logger
 	Level         string `default:"debug"`
 	Environment   string `default:"cloud9"`
-	Port          int    `default:"9000"`
+	Port          int    `default:"8080"`
 	DbSecretName  string
 	RedisEndpoint string
 }
