@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/errcode"
@@ -19,12 +20,12 @@ type ListSeriesResponse struct {
 }
 
 func (u *UsecaseImpl) ListSeries(ctx context.Context, req *ListSeriesRequest) (*ListSeriesResponse, error) {
-	const key = "series"
+	key := fmt.Sprintf("series:%d:%d", req.Limit, req.Offset)
 	params := &repository.ListSeriesParams{
 		Limit:  req.Limit,
 		Offset: req.Offset,
 	}
-	do := func() (interface{}, error) {
+	do := func() (any, error) {
 		return u.db.Series.List(ctx, params)
 	}
 	v, err, _ := u.group.Do(key, do)
