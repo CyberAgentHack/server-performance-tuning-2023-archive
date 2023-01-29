@@ -18,7 +18,7 @@ func NewSeries(db *sql.DB) *Series {
 }
 
 func (e *Series) List(ctx context.Context, params *repository.ListSeriesParams) (entity.SeriesMulti, error) {
-	query := "SELECT * FROM seasons LIMIT ? OFFSET ?"
+	query := "SELECT seriesID, displayName, description, imageURL, genreID FROM series LIMIT ? OFFSET ?"
 	rows, err := e.db.QueryContext(ctx, query, params.Limit, params.Offset)
 	if err != nil {
 		return nil, errcode.New(err)
@@ -32,20 +32,20 @@ func (e *Series) List(ctx context.Context, params *repository.ListSeriesParams) 
 			&series.DisplayName,
 			&series.Description,
 			&series.ImageURL,
-			&series.GenreIDs,
-			&series.DisplayOrder,
-			&series.IsSingleEpisode,
-			&series.EpisodeID,
+			&series.GenreID,
 		)
 		if err != nil {
 			break
 		}
-
 		seriesMulti = append(seriesMulti, series)
 	}
 
 	if closeErr := rows.Close(); closeErr != nil {
 		return nil, errcode.New(closeErr)
 	}
+	if err != nil {
+		return nil, errcode.New(err)
+	}
+
 	return seriesMulti, nil
 }
