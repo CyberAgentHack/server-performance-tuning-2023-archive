@@ -19,9 +19,9 @@ func NewSeason(db *sql.DB) *Season {
 
 func (e *Season) List(ctx context.Context, params *repository.ListSeasonsParams) (entity.Seasons, error) {
 	args := make([]any, 0, 3)
-	query := "SELECT * FROM seasons"
+	query := "SELECT seasonID, seriesID, displayName, imageURL, displayOrder FROM seasons"
 	if params.SeriesID != "" {
-		query += " WHERE seriesId = ?"
+		query += " WHERE seriesID = ?"
 		args = append(args, params.SeriesID)
 	}
 	query += " LIMIT ? OFFSET ?"
@@ -37,16 +37,14 @@ func (e *Season) List(ctx context.Context, params *repository.ListSeasonsParams)
 		season := &entity.Season{}
 		err = rows.Scan(
 			&season.ID,
+			&season.SeriesID,
 			&season.DisplayName,
 			&season.ImageURL,
-			&season.GenreIDs,
-			&season.SeriesID,
 			&season.DisplayOrder,
 		)
 		if err != nil {
 			break
 		}
-
 		seasons = append(seasons, season)
 	}
 
