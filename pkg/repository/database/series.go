@@ -18,8 +18,16 @@ func NewSeries(db *sql.DB) *Series {
 }
 
 func (e *Series) List(ctx context.Context, params *repository.ListSeriesParams) (entity.SeriesMulti, error) {
-	query := "SELECT seriesID, displayName, description, imageURL, genreID FROM series LIMIT ? OFFSET ?"
-	rows, err := e.db.QueryContext(ctx, query, params.Limit, params.Offset)
+	query := "SELECT seriesID, displayName, description, imageURL, genreID FROM series"
+	args := make([]any, 0, 3)
+	if params.SeriesID != "" {
+		query += " WHERE seriesID = ?"
+		args = append(args, params.SeriesID)
+	}
+	query += " LIMIT ? OFFSET ?"
+	args = append(args, params.Limit, params.Offset)
+
+	rows, err := e.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, errcode.New(err)
 	}

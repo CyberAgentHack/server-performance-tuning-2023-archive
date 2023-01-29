@@ -25,6 +25,7 @@ type ListEpisodesParams struct {
 	Limit    int
 	Offset   int
 	SeasonID string
+	SeriesID string
 }
 
 type Series interface {
@@ -32,8 +33,9 @@ type Series interface {
 }
 
 type ListSeriesParams struct {
-	Limit  int
-	Offset int
+	Limit    int
+	Offset   int
+	SeriesID string
 }
 
 type Season interface {
@@ -43,6 +45,7 @@ type Season interface {
 type ListSeasonsParams struct {
 	Limit    int
 	Offset   int
+	SeasonID string
 	SeriesID string
 }
 

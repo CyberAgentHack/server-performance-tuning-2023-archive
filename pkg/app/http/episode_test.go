@@ -39,12 +39,14 @@ func TestListEpisodes(t *testing.T) {
 					SeasonID: "seasonId",
 				}).Return(&usecase.ListEpisodesResponse{
 					Episodes: entity.Episodes{{ID: "episodeId"}},
-					Genres:   entity.Genres{{ID: "genreId"}},
+					Series:   entity.SeriesMulti{{ID: "seriesId"}},
+					Seasons:  entity.Seasons{{ID: "seasonsID"}},
 				}, nil)
 			},
 			expected: &entity.ListEpisodesResponse{
 				Episodes: entity.Episodes{{ID: "episodeId"}},
-				Genres:   entity.Genres{{ID: "genreId"}},
+				Series:   entity.SeriesMulti{{ID: "seriesId"}},
+				Seasons:  entity.Seasons{{ID: "seasonsID"}},
 			},
 		},
 	}

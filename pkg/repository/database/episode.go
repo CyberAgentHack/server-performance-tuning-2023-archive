@@ -21,9 +21,23 @@ func NewEpisode(db *sql.DB) *Episode {
 
 func (e *Episode) List(ctx context.Context, params *repository.ListEpisodesParams) (entity.Episodes, error) {
 	args := make([]any, 0, 3)
-	query := "SELECT * FROM episodes"
+	query := `
+		SELECT 
+			episodeID,
+			seasonID,
+			seriesID,
+			displayName,
+			description,
+			imageURL,
+			displayOrder
+		FROM episodes
+	`
 	if params.SeasonID != "" {
-		query += " WHERE seasonId = ?"
+		query += " WHERE seasonID = ?"
+		args = append(args, params.SeasonID)
+	}
+	if params.SeriesID != "" {
+		query += " WHERE seriesID = ?"
 		args = append(args, params.SeasonID)
 	}
 	query += " LIMIT ? OFFSET ?"
@@ -39,12 +53,11 @@ func (e *Episode) List(ctx context.Context, params *repository.ListEpisodesParam
 		episode := &entity.Episode{}
 		err = rows.Scan(
 			&episode.ID,
+			&episode.SeasonID,
+			&episode.SeriesID,
 			&episode.DisplayName,
 			&episode.Description,
 			&episode.ImageURL,
-			&episode.GenreIDs,
-			&episode.SeasonID,
-			&episode.PublishStartTime,
 			&episode.DisplayOrder,
 		)
 		if err != nil {

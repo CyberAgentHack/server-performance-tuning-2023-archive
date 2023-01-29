@@ -22,6 +22,7 @@ func (s *Service) listEpisodes(w http.ResponseWriter, r *http.Request) {
 		Limit:    request.QueryIntDefault(r, "limit", 20),
 		Offset:   request.QueryInt(r, "offset"),
 		SeasonID: request.Query(r, "seasonId"),
+		SeriesID: request.Query(r, "seriesId"),
 	}
 	resp, err := s.usecase.ListEpisodes(ctx, req)
 	if err != nil {
@@ -29,5 +30,5 @@ func (s *Service) listEpisodes(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response.OK(&entity.ListEpisodesResponse{Episodes: resp.Episodes, Genres: resp.Genres}, w, r)
+	response.OK(&entity.ListEpisodesResponse{Episodes: resp.Episodes, Series: resp.Series, Seasons: resp.Seasons}, w, r)
 }

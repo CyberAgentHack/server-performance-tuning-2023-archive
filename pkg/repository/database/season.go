@@ -24,6 +24,10 @@ func (e *Season) List(ctx context.Context, params *repository.ListSeasonsParams)
 		query += " WHERE seriesID = ?"
 		args = append(args, params.SeriesID)
 	}
+	if params.SeasonID != "" {
+		query += " WHERE seasonID = ?"
+		args = append(args, params.SeasonID)
+	}
 	query += " LIMIT ? OFFSET ?"
 	args = append(args, params.Limit, params.Offset)
 
@@ -50,6 +54,9 @@ func (e *Season) List(ctx context.Context, params *repository.ListSeasonsParams)
 
 	if closeErr := rows.Close(); closeErr != nil {
 		return nil, errcode.New(closeErr)
+	}
+	if err != nil {
+		return nil, errcode.New(err)
 	}
 	return seasons, nil
 }
