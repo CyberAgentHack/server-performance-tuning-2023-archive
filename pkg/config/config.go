@@ -10,6 +10,7 @@ import (
 type Config struct {
 	DBConfig      *config.DBConfig
 	RedisEndpoint string
+	TraceConfig   *TraceConfig
 }
 
 func NewConfig(env string, dbSecretName string, redisEndpoint string) (*Config, error) {
@@ -23,6 +24,9 @@ func NewConfig(env string, dbSecretName string, redisEndpoint string) (*Config, 
 				},
 			},
 			RedisEndpoint: redisEndpoint,
+			TraceConfig: &TraceConfig{
+				EnableTracing: true,
+			},
 		}
 	case "local":
 		cfg = &Config{
@@ -36,10 +40,17 @@ func NewConfig(env string, dbSecretName string, redisEndpoint string) (*Config, 
 				},
 			},
 			RedisEndpoint: "localhost:6379",
+			TraceConfig: &TraceConfig{
+				EnableTracing: false,
+			},
 		}
 	default:
 		return nil, errcode.New(fmt.Errorf("unknown Environment: %s", env))
 	}
 
 	return cfg, nil
+}
+
+type TraceConfig struct {
+	EnableTracing bool `json:"enable_tracing"`
 }

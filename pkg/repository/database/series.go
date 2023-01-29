@@ -18,6 +18,9 @@ func NewSeries(db *sql.DB) *Series {
 }
 
 func (e *Series) List(ctx context.Context, params *repository.ListSeriesParams) (entity.SeriesMulti, error) {
+	ctx, span := tracer.Start(ctx, "database.Series#List")
+	defer span.End()
+
 	query := "SELECT seriesID, displayName, description, imageURL, genreID FROM series"
 	args := make([]any, 0, 3)
 	if params.SeriesID != "" {

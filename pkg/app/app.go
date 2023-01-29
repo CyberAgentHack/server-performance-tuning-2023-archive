@@ -23,7 +23,7 @@ type App struct {
 	logger        *zap.Logger
 	Level         string `default:"debug"`
 	Environment   string `default:"cloud9"`
-	Port          int    `default:"9000"`
+	Port          int    `default:"8080"`
 	DbSecretName  string
 	RedisEndpoint string
 }
@@ -59,6 +59,14 @@ func (a *App) runWithContext(ctx context.Context) (err error) {
 	cfg, err := config.NewConfig(a.Environment, a.DbSecretName, a.RedisEndpoint)
 	if err != nil {
 		return err
+	}
+
+	if cfg.TraceConfig.EnableTracing {
+		cleanupTP, err := config.ConfigureTraceProvider(a.logger)
+		if err != nil {
+			return err
+		}
+		defer cleanupTP()
 	}
 
 	mysql, err := db.NewMySQL(cfg.DBConfig)

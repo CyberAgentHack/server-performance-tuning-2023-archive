@@ -19,6 +19,9 @@ type ListSeasonsResponse struct {
 }
 
 func (u *UsecaseImpl) ListSeasons(ctx context.Context, req *ListSeasonsRequest) (*ListSeasonsResponse, error) {
+	ctx, span := tracer.Start(ctx, "usecase.UsecaseImpl#ListSeasons")
+	defer span.End()
+
 	params := &repository.ListSeasonsParams{
 		Limit:    req.Limit,
 		Offset:   req.Offset,

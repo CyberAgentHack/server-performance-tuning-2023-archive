@@ -7,12 +7,16 @@ import (
 	"context"
 
 	"github.com/go-playground/validator"
+	"go.opentelemetry.io/otel"
 	"golang.org/x/sync/singleflight"
 
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/repository"
 )
 
-var _ Usecase = (*UsecaseImpl)(nil)
+var (
+	_      Usecase = (*UsecaseImpl)(nil)
+	tracer         = otel.Tracer("github.com/CyberAgentHack/server-performance-tuning-2023/pkg/usecase")
+)
 
 type Usecase interface {
 	ListEpisodes(ctx context.Context, req *ListEpisodesRequest) (*ListEpisodesResponse, error)

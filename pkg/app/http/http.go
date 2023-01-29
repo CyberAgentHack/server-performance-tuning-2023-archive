@@ -8,8 +8,11 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
+	"go.opentelemetry.io/otel"
 	"go.uber.org/zap"
 )
+
+var tracer = otel.Tracer("github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http")
 
 type ServerParams struct {
 	Port    int

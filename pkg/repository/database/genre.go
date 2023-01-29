@@ -21,7 +21,8 @@ func (c *Genre) BatchGet(ctx context.Context, ids []string) (entity.Genres, erro
 	if len(ids) == 0 {
 		return nil, nil
 	}
-
+	ctx, span := tracer.Start(ctx, "database.Cast#BatchGet")
+	defer span.End()
 	rows, err := c.db.QueryContext(ctx, `SELECT genreID, displayName FROM genres WHERE genreID IN (?`+strings.Repeat(",?", len(ids)-1)+`)`, convertStringsToAnys(ids)...)
 	if err != nil {
 		return nil, errcode.New(err)
