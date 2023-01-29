@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http/response"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
@@ -25,6 +26,7 @@ func NewServer(params *ServerParams) *http.Server {
 	)
 	setDefaultHandlers(router)
 	params.Service.Register(router)
+	response.SetLogger(params.Logger)
 	return &http.Server{
 		Addr:    fmt.Sprintf(":%d", params.Port),
 		Handler: router,
