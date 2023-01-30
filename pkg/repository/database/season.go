@@ -22,10 +22,14 @@ func (e *Season) List(ctx context.Context, params *repository.ListSeasonsParams)
 	defer span.End()
 
 	args := make([]any, 0, 3)
-	query := "SELECT * FROM seasons"
+	query := "SELECT seasonID, seriesID, displayName, imageURL, displayOrder FROM seasons"
 	if params.SeriesID != "" {
-		query += " WHERE seriesId = ?"
+		query += " WHERE seriesID = ?"
 		args = append(args, params.SeriesID)
+	}
+	if params.SeasonID != "" {
+		query += " WHERE seasonID = ?"
+		args = append(args, params.SeasonID)
 	}
 	query += " LIMIT ? OFFSET ?"
 	args = append(args, params.Limit, params.Offset)
@@ -40,21 +44,22 @@ func (e *Season) List(ctx context.Context, params *repository.ListSeasonsParams)
 		season := &entity.Season{}
 		err = rows.Scan(
 			&season.ID,
+			&season.SeriesID,
 			&season.DisplayName,
 			&season.ImageURL,
-			&season.GenreIDs,
-			&season.SeriesID,
 			&season.DisplayOrder,
 		)
 		if err != nil {
 			break
 		}
-
 		seasons = append(seasons, season)
 	}
 
 	if closeErr := rows.Close(); closeErr != nil {
 		return nil, errcode.New(closeErr)
+	}
+	if err != nil {
+		return nil, errcode.New(err)
 	}
 	return seasons, nil
 }

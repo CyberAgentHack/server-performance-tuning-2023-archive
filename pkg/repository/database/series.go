@@ -21,8 +21,16 @@ func (e *Series) List(ctx context.Context, params *repository.ListSeriesParams) 
 	ctx, span := tracer.Start(ctx, "database.Series#List")
 	defer span.End()
 
-	query := "SELECT * FROM seasons LIMIT ? OFFSET ?"
-	rows, err := e.db.QueryContext(ctx, query, params.Limit, params.Offset)
+	query := "SELECT seriesID, displayName, description, imageURL, genreID FROM series"
+	args := make([]any, 0, 3)
+	if params.SeriesID != "" {
+		query += " WHERE seriesID = ?"
+		args = append(args, params.SeriesID)
+	}
+	query += " LIMIT ? OFFSET ?"
+	args = append(args, params.Limit, params.Offset)
+
+	rows, err := e.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, errcode.New(err)
 	}
@@ -35,20 +43,20 @@ func (e *Series) List(ctx context.Context, params *repository.ListSeriesParams) 
 			&series.DisplayName,
 			&series.Description,
 			&series.ImageURL,
-			&series.GenreIDs,
-			&series.DisplayOrder,
-			&series.IsSingleEpisode,
-			&series.EpisodeID,
+			&series.GenreID,
 		)
 		if err != nil {
 			break
 		}
-
 		seriesMulti = append(seriesMulti, series)
 	}
 
 	if closeErr := rows.Close(); closeErr != nil {
 		return nil, errcode.New(closeErr)
 	}
+	if err != nil {
+		return nil, errcode.New(err)
+	}
+
 	return seriesMulti, nil
 }

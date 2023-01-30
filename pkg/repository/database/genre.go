@@ -18,26 +18,31 @@ func NewGenre(db *sql.DB) *Genre {
 }
 
 func (c *Genre) BatchGet(ctx context.Context, ids []string) (entity.Genres, error) {
+	if len(ids) == 0 {
+		return nil, nil
+	}
 	ctx, span := tracer.Start(ctx, "database.Cast#BatchGet")
 	defer span.End()
-	rows, err := c.db.QueryContext(ctx, `SELECT * FROM genres WHERE id IN (?`+strings.Repeat(",?", len(ids)-1)+`)`, ids)
+	rows, err := c.db.QueryContext(ctx, `SELECT genreID, displayName FROM genres WHERE genreID IN (?`+strings.Repeat(",?", len(ids)-1)+`)`, convertStringsToAnys(ids)...)
 	if err != nil {
 		return nil, errcode.New(err)
 	}
 
 	var genres entity.Genres
 	for rows.Next() {
-		var id string
-		err := rows.Scan(&id)
+		var genre entity.Genre
+		err = rows.Scan(&genre.ID, &genre.DisplayName)
 		if err != nil {
 			break
 		}
-
-		genres = append(genres, &entity.Genre{ID: id})
+		genres = append(genres, &genre)
 	}
 
 	if closeErr := rows.Close(); closeErr != nil {
 		return nil, errcode.New(closeErr)
+	}
+	if err != nil {
+		return nil, errcode.New(err)
 	}
 
 	return genres, nil
