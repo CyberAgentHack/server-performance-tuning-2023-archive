@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"time"
 
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/db/config"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/errcode"
@@ -61,6 +62,10 @@ func NewMySQL(cfg *config.DBConfig) (*sql.DB, error) {
 	if err != nil {
 		return nil, errcode.New(err)
 	}
+
+	db.SetMaxOpenConns(25)
+	db.SetMaxIdleConns(25)
+	db.SetConnMaxLifetime(5 * time.Minute)
 
 	if err := db.Ping(); err != nil {
 		return nil, errcode.New(err)
