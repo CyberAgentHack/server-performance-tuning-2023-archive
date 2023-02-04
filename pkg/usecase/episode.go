@@ -49,10 +49,10 @@ func (u *UsecaseImpl) ListEpisodes(ctx context.Context, req *ListEpisodesRequest
 
 	seasons := make(entity.Seasons, 0, len(episodes))
 	for i := range episodes {
-		if episodes[i].SeasonID == "" {
+		if episodes[i].SeasonID == nil {
 			continue
 		}
-		l, err := u.db.Season.List(ctx, &repository.ListSeasonsParams{Limit: 1, SeasonID: episodes[i].SeasonID})
+		l, err := u.db.Season.List(ctx, &repository.ListSeasonsParams{Limit: 1, SeasonID: *episodes[i].SeasonID})
 		if err != nil {
 			return nil, errcode.New(err)
 		}

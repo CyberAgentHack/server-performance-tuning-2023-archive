@@ -73,5 +73,8 @@ func (e *Episode) List(ctx context.Context, params *repository.ListEpisodesParam
 	if closeErr := rows.Close(); closeErr != nil {
 		return nil, errcode.New(closeErr)
 	}
+	if err != nil {
+		return nil, errcode.New(err)
+	}
 	return episodes, nil
 }
