@@ -35,11 +35,12 @@ export function load_test() {
   check_status_ok(res);
   
   let body = res.json();
+  const limit = Math.floor(Math.random() * 2183)
   
   const seasonRequests = Array();
   body.series.forEach(series => {
     const url = new URL(`${__ENV.API_BASE_URL}/seasons`);
-    url.searchParams.append(`limit`, `20`)
+    url.searchParams.append(`limit`, `${limit}`)
     url.searchParams.append(`offset`, `0`)
     url.searchParams.append(`seriesId`, `${series.id}`)
     seasonRequests.push(['GET', url.toString()])
