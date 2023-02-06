@@ -1,5 +1,5 @@
 import http from 'k6/http';
-import {check} from 'k6';
+import {check, fail} from 'k6';
 import { URL } from 'https://jslib.k6.io/url/1.0.0/index.js';
 
 export const options = {
@@ -55,7 +55,7 @@ export function load_test() {
   seasonRes.forEach(
     (res) => {
       const body = res.json();
-      if (body.seasons === null) {
+      if (body === null || body.seasons === null) {
         return;
       }
       body.seasons.forEach((season) => {
@@ -75,7 +75,10 @@ export function load_test() {
 }
 
 function check_status_ok(res) {
-  check(res, {
+  const result = check(res, {
     'is status OK': (r) => r.status === 200,
-  }) 
+  }); 
+  if (!result) {
+    fail(`status is not 200. response: ${JSON.stringify(res)}`);
+  }
 }
