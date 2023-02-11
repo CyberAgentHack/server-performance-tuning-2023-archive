@@ -17,7 +17,7 @@ func (s *Service) routeEpisode(r chi.Router) {
 
 func (s *Service) listEpisodes(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	ctx, span := tracer.Start(ctx, "http.Service#listEpisodes")
+	ctx, span := startTrace(ctx, r, "http.Service#listEpisodes")
 	defer span.End()
 
 	req := &usecase.ListEpisodesRequest{

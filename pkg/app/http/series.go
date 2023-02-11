@@ -17,7 +17,7 @@ func (s *Service) routeSeries(r chi.Router) {
 
 func (s *Service) listSeries(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	ctx, span := tracer.Start(ctx, "http.Service#listSeries")
+	ctx, span := startTrace(ctx, r, "http.Service#listSeries")
 	defer span.End()
 
 	req := &usecase.ListSeriesRequest{
