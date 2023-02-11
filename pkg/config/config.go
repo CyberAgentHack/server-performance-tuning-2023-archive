@@ -16,7 +16,7 @@ type Config struct {
 func NewConfig(env string, dbSecretName string, redisEndpoint string) (*Config, error) {
 	var cfg *Config
 	switch env {
-	case "prd", "cloud9":
+	case "prd":
 		cfg = &Config{
 			DBConfig: &config.DBConfig{
 				SecretsManagerDBConfig: &config.SecretsManagerDBConfig{
@@ -26,6 +26,18 @@ func NewConfig(env string, dbSecretName string, redisEndpoint string) (*Config, 
 			RedisEndpoint: redisEndpoint,
 			TraceConfig: &TraceConfig{
 				EnableTracing: true,
+			},
+		}
+	case "cloud9":
+		cfg = &Config{
+			DBConfig: &config.DBConfig{
+				SecretsManagerDBConfig: &config.SecretsManagerDBConfig{
+					SecretID: dbSecretName,
+				},
+			},
+			RedisEndpoint: redisEndpoint,
+			TraceConfig: &TraceConfig{
+				EnableTracing: false,
 			},
 		}
 	case "local":
