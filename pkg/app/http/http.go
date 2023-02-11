@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http/response"
+	"github.com/aws/aws-xray-sdk-go/xray"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"go.opentelemetry.io/otel"
 	"go.uber.org/zap"
+
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http/response"
 )
 
 var tracer = otel.Tracer("github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http")
@@ -32,7 +34,7 @@ func NewServer(params *ServerParams) *http.Server {
 	response.SetLogger(params.Logger)
 	return &http.Server{
 		Addr:    fmt.Sprintf(":%d", params.Port),
-		Handler: router,
+		Handler: xray.Handler(xray.NewFixedSegmentNamer("app"), router),
 	}
 }
 
