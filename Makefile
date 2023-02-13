@@ -15,3 +15,7 @@ run-cloud9:
 .PHONY: generate
 generate:
 	go generate ${CURDIR}/...
+
+.PHONY: setup
+setup:
+	sh scripts/setup.sh
