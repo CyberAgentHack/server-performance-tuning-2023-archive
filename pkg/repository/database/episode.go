@@ -3,6 +3,8 @@ package database
 import (
 	"context"
 	"database/sql"
+	"fmt"
+	"strings"
 
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/errcode"
@@ -23,28 +25,39 @@ func (e *Episode) List(ctx context.Context, params *repository.ListEpisodesParam
 	ctx, span := tracer.Start(ctx, "database.Episode#List")
 	defer span.End()
 
+	fields := []string{
+		"episodeID",
+		"seasonID",
+		"seriesID",
+		"displayName",
+		"description",
+		"imageURL",
+		"displayOrder",
+	}
+
+	clauses := make([]string, 0, 3)
 	args := make([]any, 0, 3)
-	query := `
-		SELECT 
-			episodeID,
-			seasonID,
-			seriesID,
-			displayName,
-			description,
-			imageURL,
-			displayOrder
-		FROM episodes
-	`
 	if params.SeasonID != "" {
-		query += " WHERE seasonID = ?"
+		clauses = append(clauses, "seasonID = ?")
 		args = append(args, params.SeasonID)
 	}
 	if params.SeriesID != "" {
-		query += " WHERE seriesID = ?"
+		clauses = append(clauses, "seriesID = ?")
 		args = append(args, params.SeasonID)
 	}
-	query += " LIMIT ? OFFSET ?"
-	args = append(args, params.Limit, params.Offset)
+
+	var whereClause string
+	if len(clauses) != 0 {
+		whereClause = fmt.Sprintf("WHERE %s", strings.Join(clauses, " AND "))
+	}
+
+	query := fmt.Sprintf(
+		"SELECT %s FROM episodes %s LIMIT %d OFFSET %d",
+		strings.Join(fields, ", "),
+		whereClause,
+		params.Limit,
+		params.Offset,
+	)
 
 	rows, err := e.db.QueryContext(ctx, query, args...)
 	if err != nil {
