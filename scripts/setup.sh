@@ -9,3 +9,4 @@ sudo amazon-linux-extras install epel -y
     sudo tar xvzf redis-stable.tar.gz
     cd redis-stable
     sudo make BUILD_TLS=yes
+    sudo install -m 755 src/redis-cli /usr/local/bin/
