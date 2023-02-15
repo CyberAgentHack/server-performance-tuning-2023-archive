@@ -75,7 +75,7 @@ func (a *App) runWithContext(ctx context.Context) (err error) {
 	}
 
 	// NOTE: redisクライアントのサンプル実装
-	_, err = db.NewRedisClient(cfg.RedisEndpoint)
+	redis, err := db.NewRedisClient(cfg.RedisEndpoint)
 	if err != nil {
 		return err
 	}
@@ -88,7 +88,7 @@ func (a *App) runWithContext(ctx context.Context) (err error) {
 		Genre:          database.NewGenre(mysql),
 		ViewingHistory: database.NewViewingHistory(),
 	}
-	uc := usecase.NewUsecase(database)
+	uc := usecase.NewUsecase(database, redis)
 
 	// run http server
 	service := apphttp.NewService(uc, a.logger)
