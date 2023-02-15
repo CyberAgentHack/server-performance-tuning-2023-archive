@@ -24,7 +24,7 @@ type App struct {
 	Level         string `default:"debug"`
 	Environment   string `default:"cloud9"`
 	Port          int    `default:"8080"`
-	DbSecretName  string
+	DBSecretName  string `envconfig:"ENV_DB_SECRET_NAME"`
 	RedisEndpoint string
 }
 
@@ -56,7 +56,7 @@ func (a *App) runWithContext(ctx context.Context) (err error) {
 	defer a.logger.Sync()
 
 	// config
-	cfg, err := config.NewConfig(a.Environment, a.DbSecretName, a.RedisEndpoint)
+	cfg, err := config.NewConfig(a.Environment, a.DBSecretName, a.RedisEndpoint)
 	if err != nil {
 		return err
 	}
