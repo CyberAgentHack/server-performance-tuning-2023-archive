@@ -8,9 +8,12 @@ import (
 	"time"
 
 	"github.com/redis/go-redis/v9"
+	"go.opentelemetry.io/otel"
 
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/errcode"
 )
+
+var tracer = otel.Tracer("github.com/CyberAgentHack/server-performance-tuning-2023/pkg/db")
 
 type RedisClient interface {
 	Get(ctx context.Context, key string, dst any) (bool, error)
@@ -32,6 +35,9 @@ func NewRedisClient(endpoint string) (RedisClient, error) {
 }
 
 func (c *redisClient) Get(ctx context.Context, key string, dst any) (bool, error) {
+	ctx, span := tracer.Start(ctx, "db.redisClient#Get")
+	defer span.End()
+
 	b, err := c.client.Get(ctx, key).Bytes()
 	if errors.Is(err, redis.Nil) {
 		return false, nil
@@ -47,6 +53,9 @@ func (c *redisClient) Get(ctx context.Context, key string, dst any) (bool, error
 }
 
 func (c *redisClient) Set(ctx context.Context, key string, v any, ttl time.Duration) error {
+	ctx, span := tracer.Start(ctx, "db.redisClient#Set")
+	defer span.End()
+
 	buf := new(bytes.Buffer)
 	err := gob.NewEncoder(buf).Encode(v)
 	if err != nil {
