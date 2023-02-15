@@ -27,20 +27,20 @@ export const options = {
 
 export function load_test() {
   const seriesURL =  new URL(`${__ENV.API_BASE_URL}/series`);
+  const offset = Math.floor(Math.random() * 2183)
   seriesURL.searchParams.append(`limit`, `20`);
-  seriesURL.searchParams.append(`offset`, `0`);
+  seriesURL.searchParams.append(`offset`, `${offset}`);
   
   let res = http.get(seriesURL.toString());
 
   check_status_ok(res);
   
   let body = res.json();
-  const limit = Math.floor(Math.random() * 2183)
   
   const seasonRequests = Array();
   body.series.forEach(series => {
     const url = new URL(`${__ENV.API_BASE_URL}/seasons`);
-    url.searchParams.append(`limit`, `${limit}`)
+    url.searchParams.append(`limit`, `20`)
     url.searchParams.append(`offset`, `0`)
     url.searchParams.append(`seriesId`, `${series.id}`)
     seasonRequests.push(['GET', url.toString()])
