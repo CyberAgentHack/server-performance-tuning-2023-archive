@@ -10,6 +10,7 @@ import (
 	"go.opentelemetry.io/otel"
 	"golang.org/x/sync/singleflight"
 
+	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/db"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/repository"
 )
 
@@ -31,13 +32,15 @@ type Usecase interface {
 
 type UsecaseImpl struct {
 	db       *repository.Database
+	redis    db.RedisClient
 	validate *validator.Validate
 	group    *singleflight.Group
 }
 
-func NewUsecase(db *repository.Database) *UsecaseImpl {
+func NewUsecase(db *repository.Database, redis db.RedisClient) *UsecaseImpl {
 	return &UsecaseImpl{
 		db:       db,
+		redis:    redis,
 		validate: validator.New(),
 		group:    &singleflight.Group{},
 	}
