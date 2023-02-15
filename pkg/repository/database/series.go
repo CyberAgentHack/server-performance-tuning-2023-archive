@@ -3,6 +3,8 @@ package database
 import (
 	"context"
 	"database/sql"
+	"fmt"
+	"strings"
 
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/errcode"
@@ -21,15 +23,27 @@ func (e *Series) List(ctx context.Context, params *repository.ListSeriesParams) 
 	ctx, span := tracer.Start(ctx, "database.Series#List")
 	defer span.End()
 
-	query := "SELECT seriesID, displayName, description, imageURL, genreID FROM series"
+	fields := []string{"seriesID", "displayName", "description", "imageURL", "genreID"}
+
+	clauses := make([]string, 0, 3)
 	args := make([]any, 0, 3)
 	if params.SeriesID != "" {
-		query += " WHERE seriesID = ?"
+		clauses = append(clauses, "seriesID = ?")
 		args = append(args, params.SeriesID)
 	}
-	query += " LIMIT ? OFFSET ?"
-	args = append(args, params.Limit, params.Offset)
 
+	var whereClause string
+	if len(clauses) != 0 {
+		whereClause = fmt.Sprintf("WHERE %s", strings.Join(clauses, " AND "))
+	}
+
+	query := fmt.Sprintf(
+		"SELECT %s FROM series %s LIMIT %d OFFSET %d",
+		strings.Join(fields, ", "),
+		whereClause,
+		params.Limit,
+		params.Offset,
+	)
 	rows, err := e.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, errcode.New(err)
@@ -59,4 +73,25 @@ func (e *Series) List(ctx context.Context, params *repository.ListSeriesParams) 
 	}
 
 	return seriesMulti, nil
+}
+
+func (e *Series) Get(ctx context.Context, id string) (*entity.Series, error) {
+	ctx, span := tracer.Start(ctx, "database.Series#Get")
+	defer span.End()
+
+	query := "SELECT seriesID, displayName, description, imageURL, genreID FROM series WHERE seriesID = ?"
+	row := e.db.QueryRowContext(ctx, query, id)
+	if err := row.Err(); err != nil {
+		return nil, errcode.New(err)
+	}
+
+	series := &entity.Series{}
+	err := row.Scan(
+		&series.ID,
+		&series.DisplayName,
+		&series.Description,
+		&series.ImageURL,
+		&series.GenreID,
+	)
+	return series, errcode.New(err)
 }
