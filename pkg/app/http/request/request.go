@@ -4,13 +4,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-
-	"github.com/go-chi/chi"
 )
-
-func URLParam(r *http.Request, key string) string {
-	return chi.URLParam(r, key)
-}
 
 func Query(r *http.Request, key string) string {
 	return r.URL.Query().Get(key)
@@ -44,41 +38,4 @@ func QueryInt(r *http.Request, key string) int {
 
 func QueryIntDefault(r *http.Request, key string, def int) int {
 	return int(QueryInt64Default(r, key, int64(def)))
-}
-
-func QueryInt32(r *http.Request, key string) int32 {
-	v := r.URL.Query().Get(key)
-	i, _ := strconv.ParseInt(v, 10, 32)
-	return int32(i)
-}
-
-func QueryDefault(r *http.Request, key, def string) string {
-	v := r.URL.Query().Get(key)
-	if v == "" {
-		return def
-	}
-	return v
-}
-
-func QueryBool(r *http.Request, key string) bool {
-	v, _ := strconv.ParseBool(r.URL.Query().Get(key))
-	return v
-}
-
-func QueryDefaultInt64(r *http.Request, key string, def int64) int64 {
-	v := r.URL.Query().Get(key)
-	i, err := strconv.ParseInt(v, 10, 64)
-	if err != nil || i == 0 {
-		return def
-	}
-	return i
-}
-
-func QueryDefaultInt(r *http.Request, key string, def int) int {
-	v := r.URL.Query().Get(key)
-	i, err := strconv.ParseInt(v, 10, 32)
-	if err != nil || i == 0 {
-		return def
-	}
-	return int(i)
 }

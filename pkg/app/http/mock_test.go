@@ -8,7 +8,6 @@ import (
 	"github.com/golang/mock/gomock"
 	"go.uber.org/zap"
 
-	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http/response"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/usecase/mock"
 )
 
@@ -27,7 +26,6 @@ func newService(m *mocks) *Service {
 		now:     time.Now,
 		logger:  zap.NewNop(),
 	}
-	response.SetLogger(s.logger)
 	return s
 }
 
