@@ -28,5 +28,6 @@ func (s *Service) listSeries(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("cache-control", "public,max-age=0,s-maxage=1")
 	s.OK(&entity.ListSeriesMultiResponse{SeriesMulti: resp.Series, Genres: resp.Genres}, w, r)
 }
