@@ -46,7 +46,7 @@ func (s *Service) newRouter() chi.Router {
 func startTrace(ctx context.Context, r *http.Request, spanName string) (context.Context, trace.Span) {
 	attrs, _, _ := otelhttptrace.Extract(ctx, r)
 	attrs = append(attrs,
-		semconv.HTTPURLKey.String(r.URL.String()),
+		semconv.HTTPURLKey.String(r.Host+r.URL.String()),
 		semconv.HTTPMethodKey.String(r.Method),
 	)
 	ctx, span := tracer.Start(ctx, spanName, trace.WithAttributes(attrs...))
