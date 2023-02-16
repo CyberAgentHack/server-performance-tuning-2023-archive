@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -115,4 +116,11 @@ func (e *Season) Get(ctx context.Context, id string) (*entity.Season, error) {
 		&season.DisplayOrder,
 	)
 	return season, errcode.New(err)
+}
+
+func (e *Season) BatchGet(ctx context.Context, ids []string) (entity.Seasons, error) {
+	ctx, span := tracer.Start(ctx, "database.Season#BatchGet")
+	defer span.End()
+
+	return nil, errcode.New(errors.New("not implemtented yet"))
 }
