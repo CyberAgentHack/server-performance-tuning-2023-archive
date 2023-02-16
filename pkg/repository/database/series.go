@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -94,4 +95,11 @@ func (e *Series) Get(ctx context.Context, id string) (*entity.Series, error) {
 		&series.GenreID,
 	)
 	return series, errcode.New(err)
+}
+
+func (e *Series) BatchGet(ctx context.Context, ids []string) (entity.SeriesMulti, error) {
+	ctx, span := tracer.Start(ctx, "database.Series#BatchGet")
+	defer span.End()
+
+	return nil, errcode.New(errors.New("not implemtented yet"))
 }

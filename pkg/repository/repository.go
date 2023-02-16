@@ -31,6 +31,7 @@ type ListEpisodesParams struct {
 type Series interface {
 	Get(ctx context.Context, id string) (*entity.Series, error)
 	List(ctx context.Context, params *ListSeriesParams) (entity.SeriesMulti, error)
+	BatchGet(ctx context.Context, ids []string) (entity.SeriesMulti, error)
 }
 
 type ListSeriesParams struct {
@@ -42,6 +43,7 @@ type ListSeriesParams struct {
 type Season interface {
 	Get(ctx context.Context, id string) (*entity.Season, error)
 	List(ctx context.Context, params *ListSeasonsParams) (entity.Seasons, error)
+	BatchGet(ctx context.Context, ids []string) (entity.Seasons, error)
 }
 
 type ListSeasonsParams struct {
