@@ -9,9 +9,9 @@ import (
 )
 
 const (
-	keyCacheControl = "cache-control"
-	keyContentType  = "content-type"
-	keyVary         = "vary"
+	keyCacheControl = "Cache-Control"
+	keyContentType  = "Content-Type"
+	keyVary         = "Vary"
 )
 
 const (
