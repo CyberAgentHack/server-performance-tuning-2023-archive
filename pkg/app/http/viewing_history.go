@@ -6,8 +6,6 @@ import (
 
 	"github.com/go-chi/chi"
 
-	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http/request"
-	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http/response"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/usecase"
 )
@@ -24,17 +22,17 @@ func (s *Service) createViewingHistory(w http.ResponseWriter, r *http.Request) {
 
 	body := &entity.ViewingHistory{}
 	if err := json.NewDecoder(r.Body).Decode(body); err != nil {
-		response.BadRequest(err, w, r)
+		s.BadRequest(err, w, r)
 		return
 	}
 
 	req := &usecase.CreateViewingHistoryRequest{ViewingHistory: body}
 	resp, err := s.usecase.CreateViewingHistory(ctx, req)
 	if err != nil {
-		response.Error(err, w, r)
+		s.Error(err, w, r)
 		return
 	}
-	response.OK(resp.ViewingHistory, w, r)
+	s.OK(resp.ViewingHistory, w, r)
 }
 
 func (s *Service) listViewingHistories(w http.ResponseWriter, r *http.Request) {
@@ -42,20 +40,20 @@ func (s *Service) listViewingHistories(w http.ResponseWriter, r *http.Request) {
 	ctx, span := startTrace(ctx, r, "http.Service#createViewinghistory")
 	defer span.End()
 
-	episodeIDs := request.QueryStrings(r, "episodeIds")
+	episodeIDs := QueryStrings(r, "episodeIds")
 	if len(episodeIDs) == 0 {
-		response.OK(nil, w, r)
+		s.OK(nil, w, r)
 		return
 	}
 	req := &usecase.BatchGetViewingHistoriesRequest{
 		UserID:     r.Header.Get("userId"),
-		EpisodeIDs: request.QueryStrings(r, "episodeIds"),
+		EpisodeIDs: QueryStrings(r, "episodeIds"),
 	}
 	resp, err := s.usecase.BatchGetViewingHistories(ctx, req)
 	if err != nil {
-		response.Error(err, w, r)
+		s.Error(err, w, r)
 		return
 	}
 
-	response.OK(resp.ViewingHistories, w, r)
+	s.OK(resp.ViewingHistories, w, r)
 }
