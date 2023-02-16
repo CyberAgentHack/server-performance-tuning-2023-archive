@@ -25,35 +25,28 @@ func (u *UsecaseImpl) ListSeasons(ctx context.Context, req *ListSeasonsRequest) 
 	defer span.End()
 
 	key := fmt.Sprintf("%v", req)
-	v, err, _ := u.group.Do(key, func() (any, error) {
-		resp := &ListSeasonsResponse{}
-		hit, err := u.redis.Get(ctx, key, resp)
-		if err != nil {
-			return nil, errcode.New(err)
-		}
-		if hit {
-			return resp, nil
-		}
-
-		params := &repository.ListSeasonsParams{
-			Limit:    req.Limit,
-			Offset:   req.Offset,
-			SeriesID: req.SeriesID,
-		}
-		seasons, err := u.db.Season.List(ctx, params)
-		if err != nil {
-			return nil, errcode.New(err)
-		}
-
-		resp = &ListSeasonsResponse{
-			Seasons: seasons,
-		}
-		u.redis.Set(ctx, key, resp, time.Second*10)
+	resp := &ListSeasonsResponse{}
+	hit, err := u.redis.Get(ctx, key, resp)
+	if err != nil {
+		return nil, errcode.New(err)
+	}
+	if hit {
 		return resp, nil
-	})
+	}
+
+	params := &repository.ListSeasonsParams{
+		Limit:    req.Limit,
+		Offset:   req.Offset,
+		SeriesID: req.SeriesID,
+	}
+	seasons, err := u.db.Season.List(ctx, params)
 	if err != nil {
 		return nil, errcode.New(err)
 	}
 
-	return v.(*ListSeasonsResponse), nil
+	resp = &ListSeasonsResponse{
+		Seasons: seasons,
+	}
+	u.redis.Set(ctx, key, resp, time.Second*10)
+	return resp, nil
 }
