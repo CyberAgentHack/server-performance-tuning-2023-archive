@@ -2,6 +2,8 @@ package usecase
 
 import (
 	"context"
+	"fmt"
+	"time"
 
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/errcode"
@@ -22,14 +24,36 @@ func (u *UsecaseImpl) ListSeasons(ctx context.Context, req *ListSeasonsRequest) 
 	ctx, span := tracer.Start(ctx, "usecase.UsecaseImpl#ListSeasons")
 	defer span.End()
 
-	params := &repository.ListSeasonsParams{
-		Limit:    req.Limit,
-		Offset:   req.Offset,
-		SeriesID: req.SeriesID,
-	}
-	seasons, err := u.db.Season.List(ctx, params)
+	key := fmt.Sprintf("%v", req)
+	v, err, _ := u.group.Do(key, func() (any, error) {
+		resp := &ListSeasonsResponse{}
+		hit, err := u.redis.Get(ctx, key, resp)
+		if err != nil {
+			return nil, errcode.New(err)
+		}
+		if hit {
+			return resp, nil
+		}
+
+		params := &repository.ListSeasonsParams{
+			Limit:    req.Limit,
+			Offset:   req.Offset,
+			SeriesID: req.SeriesID,
+		}
+		seasons, err := u.db.Season.List(ctx, params)
+		if err != nil {
+			return nil, errcode.New(err)
+		}
+
+		resp = &ListSeasonsResponse{
+			Seasons: seasons,
+		}
+		u.redis.Set(ctx, key, resp, time.Second*10)
+		return resp, nil
+	})
 	if err != nil {
 		return nil, errcode.New(err)
 	}
-	return &ListSeasonsResponse{Seasons: seasons}, nil
+
+	return v.(*ListSeasonsResponse), nil
 }
