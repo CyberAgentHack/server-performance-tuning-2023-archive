@@ -5,8 +5,6 @@ import (
 
 	"github.com/go-chi/chi"
 
-	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http/request"
-	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http/response"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/usecase"
 )
@@ -21,15 +19,15 @@ func (s *Service) listSeasons(w http.ResponseWriter, r *http.Request) {
 	defer span.End()
 
 	req := &usecase.ListSeasonsRequest{
-		Limit:    request.QueryIntDefault(r, "limit", 20),
-		Offset:   request.QueryInt(r, "offset"),
-		SeriesID: request.Query(r, "seriesId"),
+		Limit:    QueryIntDefault(r, "limit", 20),
+		Offset:   QueryInt(r, "offset"),
+		SeriesID: Query(r, "seriesId"),
 	}
 	resp, err := s.usecase.ListSeasons(ctx, req)
 	if err != nil {
-		response.Error(err, w, r)
+		s.Error(err, w, r)
 		return
 	}
 
-	response.OK(&entity.ListSeasonsResponse{Seasons: resp.Seasons}, w, r)
+	s.OK(&entity.ListSeasonsResponse{Seasons: resp.Seasons}, w, r)
 }

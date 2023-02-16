@@ -5,8 +5,6 @@ import (
 
 	"github.com/go-chi/chi"
 
-	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http/request"
-	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/app/http/response"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/entity"
 	"github.com/CyberAgentHack/server-performance-tuning-2023/pkg/usecase"
 )
@@ -21,14 +19,14 @@ func (s *Service) listSeries(w http.ResponseWriter, r *http.Request) {
 	defer span.End()
 
 	req := &usecase.ListSeriesRequest{
-		Limit:  request.QueryIntDefault(r, "limit", 20),
-		Offset: request.QueryInt(r, "offset"),
+		Limit:  QueryIntDefault(r, "limit", 20),
+		Offset: QueryInt(r, "offset"),
 	}
 	resp, err := s.usecase.ListSeries(ctx, req)
 	if err != nil {
-		response.Error(err, w, r)
+		s.Error(err, w, r)
 		return
 	}
 
-	response.OK(&entity.ListSeriesMultiResponse{SeriesMulti: resp.Series, Genres: resp.Genres}, w, r)
+	s.OK(&entity.ListSeriesMultiResponse{SeriesMulti: resp.Series, Genres: resp.Genres}, w, r)
 }
