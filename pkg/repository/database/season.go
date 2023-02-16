@@ -49,7 +49,7 @@ func (e *Season) List(ctx context.Context, params *repository.ListSeasonsParams)
 	}
 
 	query := fmt.Sprintf(
-		"SELECT %s FROM seasons %s LIMIT %d OFFSET %d",
+		"SELECT %s FROM seasons %s ORDER BY displayOrder LIMIT %d OFFSET %d",
 		strings.Join(fields, ", "),
 		whereClause,
 		params.Limit,
