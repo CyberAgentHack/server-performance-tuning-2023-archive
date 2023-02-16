@@ -29,5 +29,6 @@ func (s *Service) listSeasons(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("cache-control", "public,max-age=0,s-maxage=1")
 	s.OK(&entity.ListSeasonsResponse{Seasons: resp.Seasons}, w, r)
 }
