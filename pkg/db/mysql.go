@@ -62,6 +62,8 @@ func NewMySQL(cfg *config.DBConfig) (*sql.DB, error) {
 		return nil, errcode.New(err)
 	}
 
+	db.SetMaxIdleConns(50)
+
 	if err := db.Ping(); err != nil {
 		return nil, errcode.New(err)
 	}
