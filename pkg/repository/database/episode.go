@@ -52,7 +52,7 @@ func (e *Episode) List(ctx context.Context, params *repository.ListEpisodesParam
 	}
 
 	query := fmt.Sprintf(
-		"SELECT %s FROM episodes %s LIMIT %d OFFSET %d",
+		"SELECT %s FROM episodes %s ORDER BY displayOrder LIMIT %d OFFSET %d",
 		strings.Join(fields, ", "),
 		whereClause,
 		params.Limit,
